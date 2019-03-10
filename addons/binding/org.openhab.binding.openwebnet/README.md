@@ -92,6 +92,11 @@ After upgrading the binding to a new version, there is no need to activate depen
 
 When upgrading the binding to a new version it's suggested also to remove OpenWebNet Things before uninstalling the old binding, and discover/configure them again after binding has been updated.
 
+`-----------------------------`
+## (That's is why I suggest in the instructions to create things again - this is not needed for things defined in .things file)
+## But good that it worked to you by setting again the bridge in things properties. I will add this hint in the binding README.
+`-----------------------------`
+
 ### Upgrade - Marketplace installation
 
 1. Goto PaperUI > Add-ons > Bindings > search `openweb` > UNINSTALL
@@ -426,6 +431,9 @@ See: https://github.com/mvalla/openhab2-addons/issues/34
 See: https://github.com/mvalla/openhab2-addons/issues/14
 
 ## Changelog
+
+**v2.5.0-M3-pre1** - dd/mm/2019
+- zzzzzzzz
 
 **v2.5.0-M2** - 08/03/2019
 - [FIX #29] Fixed (again) Automation command translation (1000#)
