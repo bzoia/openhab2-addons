@@ -433,6 +433,7 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
 ## Changelog
 
 **v2.5.0-M3-pre1** - dd/mm/2019
+- [FIX #30] manually configured things are now ignored during auto-discovery
 - zzzzzzzz
 
 **v2.5.0-M2** - 08/03/2019
