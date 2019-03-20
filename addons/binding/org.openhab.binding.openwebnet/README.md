@@ -432,6 +432,11 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
 - [FIX #30] manually configured things are now ignored during auto-discovery
 - debug messages for ZB connect/connectDongle
 
+**v2.5.0.M2-1** - 20/03/2019
+- [FIX #66] USB dongle (gateway) cannot connect anymore
+- [FIX #65] Rollershutter % Position does not work in 2.5.0.M2
+- removed Switchable tag to shutter channel
+
 **v2.5.0.M2** - 08/03/2019
 - [FIX #29] Fixed (again) Automation command translation (1000#)
 - [FIX] Fixed Energy Meter subscription (every 10min)
