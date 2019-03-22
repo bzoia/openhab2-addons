@@ -353,7 +353,7 @@ String              iLR_setMode      "Set Mode"                              (gL
 sitemap openwebnet label="OpenWebNet Binding Example Sitemap"
 {
 
-Frame label="Living Room"
+    Frame label="Living Room"
     {
           Default item=iLR_switch           icon="light"    
           Default item=iLR_dimmer           icon="light" 
@@ -377,7 +377,9 @@ Frame label="Living Room"
              Setpoint   item=iLR_setpointTemp label="Set Temp [%.1f °C]" minValue=12.5 maxValue=30 step=0.5
           }
     }
-
+    Frame label="Electrical System" {
+        Default item=iCENTRAL_en_power  label="General Power Consumption [%.0f W]"     icon="energy"
+    }
 }
 ```
 
@@ -525,6 +527,7 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
     - gateways and OWN frames for ZigBee
     - frame parsing
     - monitoring events from BUS
+  
   The lib also uses few modified classes from the openHAB 1.x BTicino binding for socket handling and priority queues.
 
 ## Special thanks
