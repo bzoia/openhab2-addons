@@ -214,7 +214,6 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
         properties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_WHERE, bridgeHandler.normalizeWhere(where));
         properties.put(OpenWebNetBindingConstants.PROPERTY_OWNID,
                 bridgeHandler.ownIdFromWhoWhere(bridgeHandler.normalizeWhere(where), deviceWho.value().toString()));
-
         if ((deviceType == OpenDeviceType.MULTIFUNCTION_SCENARIO_CONTROL
                 || deviceType == OpenDeviceType.SCENARIO_CONTROL) && baseMsg != null) {
             properties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_SCENARIO_BUTTONS,
@@ -227,7 +226,8 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
             thingLabel = thingLabel + " (WHERE=" + whereLabel + ")";
         }
         discoveryResult = DiscoveryResultBuilder.create(thingUID).withThingType(thingTypeUID).withProperties(properties)
-                .withBridge(bridgeUID).withLabel(thingLabel).build();
+                .withRepresentationProperty(OpenWebNetBindingConstants.PROPERTY_OWNID).withBridge(bridgeUID)
+                .withLabel(thingLabel).build();
         thingDiscovered(discoveryResult);
     }
 

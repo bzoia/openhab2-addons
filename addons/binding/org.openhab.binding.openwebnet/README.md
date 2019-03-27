@@ -90,7 +90,8 @@ After upgrading the binding to a new version, there is no need to activate depen
 
 ## Upgrade of the binding
 
-When upgrading the binding to a new version it's suggested also to remove OpenWebNet Things before uninstalling the old binding, and discover/configure them again after binding has been updated.
+When upgrading the binding to a new version it's suggested also to remove OpenWebNet Things before uninstalling the old binding, and discover/configure them again after binding has been updated. Instead of removing things also re-setting the bridge in things properties should work.
+If things are defined using .things file, they do not need to be re-created.
 
 ### Upgrade - Marketplace installation
 
@@ -182,7 +183,7 @@ Alternatively the BUS/SCS Gateway thing can be configured using the `.things` fi
 
 ### Configuring Wireless (ZigBee) USB Dongle
 
-The wirelss ZigBee USB dongle is discovered automatically and added in Inbox. Manual configuration is not supported at the moment.
+The wireless ZigBee USB dongle is discovered automatically and added in Inbox. Manual configuration is not supported at the moment.
 
 ### Configuring Devices
 
@@ -352,7 +353,7 @@ String              iLR_setMode      "Set Mode"                              (gL
 sitemap openwebnet label="OpenWebNet Binding Example Sitemap"
 {
 
-Frame label="Living Room"
+    Frame label="Living Room"
     {
           Default item=iLR_switch           icon="light"    
           Default item=iLR_dimmer           icon="light" 
@@ -376,7 +377,9 @@ Frame label="Living Room"
              Setpoint   item=iLR_setpointTemp label="Set Temp [%.1f °C]" minValue=12.5 maxValue=30 step=0.5
           }
     }
-
+    Frame label="Electrical System" {
+        Default item=iCENTRAL_en_power  label="General Power Consumption [%.0f W]"     icon="energy"
+    }
 }
 ```
 
@@ -427,11 +430,14 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
 
 ## Changelog
 
+**v2.5.0.M3 =IN PROGRESS=** - dd/mm/2019
+- [FIX #30] manually configured things are now ignored during auto-discovery
+- debug messages for ZB connect/connectDongle
+
 **v2.5.0.M2-1** - 20/03/2019
 - [FIX #66] USB dongle (gateway) cannot connect anymore
 - [FIX #65] Rollershutter % Position does not work in 2.5.0.M2
 - removed Switchable tag to shutter channel
-
 
 **v2.5.0.M2** - 08/03/2019
 - [FIX #29] Fixed (again) Automation command translation (1000#)
@@ -521,6 +527,7 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
     - gateways and OWN frames for ZigBee
     - frame parsing
     - monitoring events from BUS
+  
   The lib also uses few modified classes from the openHAB 1.x BTicino binding for socket handling and priority queues.
 
 ## Special thanks
