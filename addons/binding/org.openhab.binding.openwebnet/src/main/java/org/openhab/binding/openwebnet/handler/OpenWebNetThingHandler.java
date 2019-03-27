@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The {@link OpenWebNetThingHandler} is responsible for handling commands for a OpenWebNet device.
  * It's the abstract class for all OpenWebNet things. It should be extended by each specific OpenWebNet category of
- * device (WHO)
+ * device (WHO).
  *
  * @author Massimo Valla - Initial contribution
  */
@@ -139,38 +139,23 @@ public abstract class OpenWebNetThingHandler extends BaseThingHandler {
 
     /**
      * Handle incoming message from OWN network directed to a device. It should be further implemented by each specific
-     * OpenWebNet category of device (WHO)
+     * device handler.
      *
      * @param msg BaseOpenMessage to handle
      */
     protected void handleMessage(BaseOpenMessage msg) {
-        // logger.debug("==OWN:ThingHandler== handleMessage() for thing: {}", getThing().getUID());
-        // update status to ONLINE if not already online
         ThingStatus ts = getThing().getStatus();
-        // logger.debug("(((((((((((((((((((((((((((((((((((((((((((((( ThingStatus = {}", ts);
         if (ThingStatus.ONLINE != ts && ThingStatus.REMOVING != ts && ThingStatus.REMOVED != ts) {
             updateStatus(ThingStatus.ONLINE);
         }
     }
 
     /**
-     * Request to gateway state for thing channel. It must be implemented by each specific OpenWebNet category of device
-     * (WHO)
+     * Request to gateway state for thing channel. It must be implemented by each specific device handler.
      *
      * @param channel ChannleUID to be requested
      */
     protected abstract void requestChannelState(ChannelUID channel);
-
-    /*
-     * @Override
-     * public void handleRemoval() {
-     * logger.debug("==OWN:ThingHandler== handleRemoval() for {}", getThing().getUID());
-     * if (bridgeHandler != null) {
-     * bridgeHandler.unregisterDevice(ownId);
-     * }
-     * super.handleRemoval();
-     * }
-     */
 
     @Override
     public void dispose() {

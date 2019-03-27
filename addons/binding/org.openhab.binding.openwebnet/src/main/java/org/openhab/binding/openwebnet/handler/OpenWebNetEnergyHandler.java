@@ -33,8 +33,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The {@link OpenWebNetEnergyHandler} is responsible for handling commands/messages for a Energy Management OpenWebNet
- * device.
- * It extends the abstract {@link OpenWebNetThingHandler}.
+ * device. It extends the abstract {@link OpenWebNetThingHandler}.
  *
  * @author Massimo Valla - Initial contribution
  */
@@ -43,6 +42,7 @@ public class OpenWebNetEnergyHandler extends OpenWebNetThingHandler {
     private final Logger logger = LoggerFactory.getLogger(OpenWebNetEnergyHandler.class);
 
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = OpenWebNetBindingConstants.ENERGY_SUPPORTED_THING_TYPES;
+    public final int ENERGY_SUBSCRIPTION_PERIOD = 10; // minutes
 
     private ScheduledFuture<?> notificationSchedule = null;
 
@@ -55,19 +55,19 @@ public class OpenWebNetEnergyHandler extends OpenWebNetThingHandler {
     public void initialize() {
         super.initialize();
         logger.debug("==OWN:EnergyHandler== initialize() thing={}", thing.getUID());
-        int period = 10;
         notificationSchedule = scheduler.scheduleAtFixedRate(() -> {
             logger.debug(
                     "==OWN:EnergyHandler== For WHERE={} subscribing to active power changes notification for the next {}min",
-                    deviceWhere, period);
+                    deviceWhere, ENERGY_SUBSCRIPTION_PERIOD);
             try {
-                bridgeHandler.gateway.send(EnergyManagement.setActivePowerNotificationsTime(deviceWhere, period));
+                bridgeHandler.gateway.send(
+                        EnergyManagement.setActivePowerNotificationsTime(deviceWhere, ENERGY_SUBSCRIPTION_PERIOD));
             } catch (Exception e) {
                 logger.warn(
                         "==OWN:EnergyHandler== For WHERE={} could not subscribe to active power changes notifications. Exception={}",
                         deviceWhere, e.getMessage());
             }
-        }, 0, period - 1, TimeUnit.MINUTES);
+        }, 0, ENERGY_SUBSCRIPTION_PERIOD - 1, TimeUnit.MINUTES);
 
     }
 
@@ -85,7 +85,6 @@ public class OpenWebNetEnergyHandler extends OpenWebNetThingHandler {
                 logger.debug(
                         "==OWN:EnergyHandler== For WHERE={} could not UN-subscribe from active power changes notifications. Exception={}",
                         deviceWhere, e.getMessage());
-                //e.printStackTrace();
             }
         }, 1, TimeUnit.MINUTES);
 
@@ -100,11 +99,8 @@ public class OpenWebNetEnergyHandler extends OpenWebNetThingHandler {
 
     @Override
     protected void handleChannelCommand(ChannelUID channel, Command command) {
-
         logger.warn("==OWN:EnergyHandler== Read only channel, unsupported command {}", command);
-
-        // TODO
-        // Note: if communication with thing fails for some reason,
+        // TODO if communication with thing fails for some reason,
         // indicate that by setting the status with detail information
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
         // "Could not control device at IP address x.x.x.x");
@@ -146,7 +142,7 @@ public class OpenWebNetEnergyHandler extends OpenWebNetThingHandler {
             activePower = Integer.parseInt(msg.getDimValues()[0]);
             updateState(CHANNEL_POWER, new DecimalType(activePower));
         } catch (NumberFormatException e) {
-            logger.warn("==OWN:EnergyHandler== NumberFormatException on frame {}: {}", msg, e);
+            logger.warn("==OWN:EnergyHandler== NumberFormatException on frame {}: {}", msg, e.getMessage());
             updateState(CHANNEL_POWER, UnDefType.UNDEF);
         }
     }

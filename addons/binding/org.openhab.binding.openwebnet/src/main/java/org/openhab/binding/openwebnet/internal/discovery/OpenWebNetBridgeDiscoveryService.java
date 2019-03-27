@@ -12,8 +12,6 @@
  */
 package org.openhab.binding.openwebnet.internal.discovery;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -25,13 +23,11 @@ import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.openwebnet.OpenWebNetBindingConstants;
-import org.openwebnet.AuthException;
 //import org.openhab.binding.openwebnet.handler.OpenWebNetBridgeHandler;
 import org.openwebnet.OpenError;
 import org.openwebnet.OpenGatewayZigBee;
 import org.openwebnet.OpenListener;
 import org.openwebnet.OpenWebNet;
-import org.openwebnet.bus.MyHomeSocketFactory;
 import org.openwebnet.message.GatewayManagement;
 import org.openwebnet.message.OpenMessage;
 import org.osgi.service.component.annotations.Component;
@@ -40,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The {@link OpenWebNetBridgeDiscoveryService} is a {@link DiscoveryService} implementation responsible for discovering
- * OpenWebNet gateways in the network using UPnP and OpwenWebNet devices.
+ * OpenWebNet gateways in the network (using UPnP) and OpwenWebNet devices.
  *
  * @author Massimo Valla - Initial contribution
  */
@@ -61,7 +57,6 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
 
     public OpenWebNetBridgeDiscoveryService() {
         super(OpenWebNetBindingConstants.BRIDGE_SUPPORTED_THING_TYPES, DISCOVERY_TIMEOUT, false);
-
         logger.debug("#############################################################################################");
         logger.debug("==OWN:BridgeDiscovery== constructor()");
         logger.debug("#############################################################################################");
@@ -76,8 +71,6 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
     protected void startScan() {
         logger.info("==OWN:BridgeDiscovery== ------ startScan() - SEARCHING for bridges...");
         startZigBeeScan();
-        // FIXME
-        // startBUSScan();
     }
 
     /**
@@ -103,34 +96,6 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
                 zbgateway.send(GatewayManagement.requestMACAddress());
             }
         }
-    }
-
-    /**
-     * BUS gw discovery for VDK on localhost:20000 (debug)
-     *
-     */
-    private void startBUSScan() {
-        String host = "localhost";
-        int port = 20000;
-        try {
-            Socket monitorSk = MyHomeSocketFactory.openMonitorSession(host, port, "12345");
-            monitorSk.close();
-        } catch (IOException e) {
-            logger.debug("==OWN:BridgeDiscovery== localhost GW not found");
-            return;
-        } catch (AuthException e) {
-            logger.debug("==OWN:BridgeDiscovery== localhost GW auth exception");
-            return;
-        }
-        ThingUID busgw = new ThingUID(OpenWebNetBindingConstants.THING_TYPE_BUS_GATEWAY, host);
-        Map<String, Object> busgwProperties = new HashMap<>(3);
-        busgwProperties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_HOST, host);
-        busgwProperties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_PORT, Integer.toString(port));
-
-        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(busgw).withProperties(busgwProperties)
-                .withLabel(OpenWebNetBindingConstants.THING_LABEL_BUS_GATEWAY + " (" + host + ":" + port + ")").build();
-        logger.info("==OWN:BridgeDiscovery== --- BUS thing discovered: {}", discoveryResult.getLabel());
-        thingDiscovered(discoveryResult);
     }
 
     @Override
@@ -178,19 +143,19 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
 
     @Override
     public void onConnectionClosed() {
-        logger.debug("==OWN:BridgeDiscovery== onConnectionClosed()");
+        logger.debug("==OWN:BridgeDiscovery== recevied onConnectionClosed()");
         stopScan();
     }
 
     @Override
     public void onDisconnected() {
-        logger.error("==OWN:BridgeDiscovery== onDisconnected()");
+        logger.warn("==OWN:BridgeDiscovery== received onDisconnected()");
         stopScan();
     }
 
     @Override
     public void onReconnected() {
-        logger.info("==OWN:BridgeDiscovery== onReconnected()");
+        logger.warn("==OWN:BridgeDiscovery== received onReconnected()");
     }
 
     @Override

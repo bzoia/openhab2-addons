@@ -45,8 +45,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The {@link OpenWebNetScenarioHandler} is responsible for handling commands/messages for CEN/CEN+ Scenarios and Dry
- * Contact / IR sensors.
- * It extends the abstract {@link OpenWebNetThingHandler}.
+ * Contact / IR sensors. It extends the abstract {@link OpenWebNetThingHandler}.
  *
  * @author Massimo Valla - Initial contribution
  */
@@ -161,7 +160,7 @@ public class OpenWebNetScenarioHandler extends OpenWebNetThingHandler {
             try {
                 prState = PressureState.valueOf(((StringType) command).toString());
             } catch (IllegalArgumentException e) {
-                logger.warn("==OWN:ScenarioHandler== Cannot handle command {} for thing {} ({})", command,
+                logger.warn("==OWN:ScenarioHandler== Cannot handle command {} for thing {}. Exception: {}", command,
                         getThing().getUID(), e.getMessage());
                 return;
             }
@@ -211,8 +210,7 @@ public class OpenWebNetScenarioHandler extends OpenWebNetThingHandler {
             logger.warn("==OWN:ScenarioHandler== Unsupported command {} for thing {}", command, getThing().getUID());
             return;
         }
-        // TODO
-        // Note: if communication with thing fails for some reason,
+        // TODO if communication with thing fails for some reason,
         // indicate that by setting the status with detail information
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
         // "Could not control device at IP address x.x.x.x");
@@ -391,6 +389,7 @@ public class OpenWebNetScenarioHandler extends OpenWebNetThingHandler {
         try {
             return Integer.parseInt(channel.getId().substring(channel.getId().lastIndexOf("_") + 1));
         } catch (NumberFormatException nfe) {
+            logger.warn("==OWN:ScenarioHandler== channelToButton() Exception: {}", nfe.getMessage());
             return null;
         }
     }
@@ -409,20 +408,21 @@ public class OpenWebNetScenarioHandler extends OpenWebNetThingHandler {
         return intSet;
     }
 
-    private static String setIntToCsvString(Set<Integer> set) {
-        if (set.isEmpty()) {
-            return "";
-        } else {
-            final String SEPARATOR = ",";
-            StringBuilder csvBuilder = new StringBuilder();
-            for (Integer i : set) {
-                csvBuilder.append(i);
-                csvBuilder.append(SEPARATOR);
-            }
-            String csv = csvBuilder.toString();
-            csv = csv.substring(0, csv.length() - SEPARATOR.length());
-            return csv;
-        }
-    }
-
+    /*
+     * private static String setIntToCsvString(Set<Integer> set) {
+     * if (set.isEmpty()) {
+     * return "";
+     * } else {
+     * final String SEPARATOR = ",";
+     * StringBuilder csvBuilder = new StringBuilder();
+     * for (Integer i : set) {
+     * csvBuilder.append(i);
+     * csvBuilder.append(SEPARATOR);
+     * }
+     * String csv = csvBuilder.toString();
+     * csv = csv.substring(0, csv.length() - SEPARATOR.length());
+     * return csv;
+     * }
+     * }
+     */
 } // class

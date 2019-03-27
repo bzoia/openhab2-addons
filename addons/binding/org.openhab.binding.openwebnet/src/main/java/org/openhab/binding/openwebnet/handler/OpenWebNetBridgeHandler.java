@@ -119,12 +119,14 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
             isBusGateway = true;
         }
 
-        // FIXME debug
-        if (!this.testTransformations()) {
-            logger.error("==OWN== @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TRANSFORMATION ERORR");
-            return;
-        }
-        // FIXME end-debug
+        // debug
+        /*
+         * if (!this.testTransformations()) {
+         * logger.error("==OWN== @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TRANSFORMATION ERORR");
+         * return;
+         * }
+         */
+        // end-debug
 
         gateway.subscribe(this);
         if (gateway.isConnected()) { // gateway is already connected, device can go ONLINE
@@ -145,8 +147,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
             }, GATEWAY_ONLINE_TIMEOUT, TimeUnit.SECONDS);
         }
 
-        // TODO
-        // Note: When initialization can NOT be done set the status with more details for further
+        // TODO When initialization can NOT be done set the status with more details for further
         // analysis. See also class ThingStatusDetail for all available status details.
         // Add a description to give user information to understand why thing does not work as expected. E.g.
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
@@ -155,7 +156,6 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
 
     /**
      * Init a ZigBee gateway based on config properties
-     *
      */
     private void initZigBeeGateway() {
         String serialPort = (String) (getConfig().get(CONFIG_PROPERTY_SERIAL_PORT));
@@ -171,7 +171,6 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
 
     /**
      * Init a BUS/SCS gateway based on config properties
-     *
      */
     private void initBusGateway() {
         if (getConfig().get(CONFIG_PROPERTY_HOST) != null) {
@@ -221,9 +220,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     public Collection<ConfigStatusMessage> getConfigStatus() {
         logger.debug("==OWN== BridgeHandler.getConfigStatus() ");
         Collection<ConfigStatusMessage> configStatusMessages;
-
         configStatusMessages = Collections.emptyList();
-
         return configStatusMessages;
     }
 
@@ -270,7 +267,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
      * @param listener to receive device found notifications
      */
     public synchronized void searchDevices(OpenNewDeviceListener listener) {
-        logger.debug("==OWN==  -------- BridgeHandler.searchDevices()");
+        logger.debug("==OWN== -------- BridgeHandler.searchDevices()");
         scanIsActive = true;
         logger.debug("==OWN== -------- scanIsActive={}", scanIsActive);
         deviceDiscoveryListener = listener;
@@ -286,7 +283,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
                 try {
                     gateway.discoverDevices(listener);
                 } catch (Exception e) {
-                    logger.error("==OWN== -------- EXCEPTION while searching devices on gateway '{}': {}",
+                    logger.warn("==OWN== -------- EXCEPTION while searching devices on gateway '{}': {}",
                             this.getThing().getLabel(), e.getMessage());
                 }
                 searchingGatewayDevices = false;
@@ -304,8 +301,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     }
 
     /**
-     * NOtifies that the scan has been stopped/aborted by OpenWebNetDeviceDiscoveryService
-     *
+     * Notifies that the scan has been stopped/aborted by OpenWebNetDeviceDiscoveryService
      */
     public void scanStopped() {
         scanIsActive = false;
@@ -346,7 +342,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
      */
     protected void unregisterDevice(String ownId) {
         if (registeredDevices.remove(ownId) != null) {
-            logger.info("==OWN:BridgeHandler== un-registered device ownId={}", ownId); // TODO move to debug
+            logger.debug("==OWN:BridgeHandler== un-registered device ownId={}", ownId);
         } else {
             logger.warn("==OWN:BridgeHandler== could not un-register ownId={} (not found)", ownId);
         }
@@ -373,7 +369,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
         // GATEWAY MANAGEMENT
         if (msg instanceof GatewayManagement) {
             GatewayManagement gwMgmtMsg = (GatewayManagement) msg;
-            logger.debug("==OWN==  GatewayManagement WHAT = {}", gwMgmtMsg.getWhat());
+            logger.debug("==OWN==  GatewayManagement WHAT = {}, ignoring", gwMgmtMsg.getWhat());
             return;
         }
 
@@ -394,12 +390,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
                     logger.debug("==OWN==  ownId={} has NO DEVICE associated, ignoring it", ownId);
                 }
             } else {
-                // OpenWebNetThingHandler deviceHandler = (OpenWebNetThingHandler) device.getHandler();
-                // if (deviceHandler != null) {
                 deviceHandler.handleMessage(baseMsg);
-                // } else {
-                // logger.debug("==OWN== ownId={} has NO HANDLER associated, ignoring it", ownId);
-                // }
             }
         } else {
             logger.debug("==OWN==  BridgeHandler ignoring frame {}. WHO={} is not supported by the binding", baseMsg,
@@ -426,7 +417,6 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
             }
         }
         updateStatus(ThingStatus.ONLINE);
-
     }
 
     @Override
@@ -485,25 +475,11 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
         updateStatus(ThingStatus.ONLINE);
         logger.debug("==OWN== Bridge status set to ONLINE");
         // TODO refresh devices' status?
-
     }
 
     /**
-     * Return a ownId string (=WHO.WHERE) from a WHERE String and ThingHandler
-     *
-     * @param String                 where WHERE address
-     * @param OpenWebNetThingHandler thing handler
-     * @return ownId string
-     */
-    /*
-     * protected String ownIdFromWhere(String where, OpenWebNetThingHandler handler) {
-     * return handler.ownIdPrefix() + "." + normalizeWhere(where);
-     * }
-     */
-
-    /**
      * Return a ownId string (=WHO.WHERE) from a deviceWhere thing config parameter and ThingHandler.
-     * In case of ZigBee gatewya, ownId=Z.ADDR
+     * In case of ZigBee gateway, ownId=Z.ADDR
      *
      * @param String                 deviceWhere
      * @param OpenWebNetThingHandler thing handler
@@ -570,7 +546,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
      *      - private   ownIdFromMessage()  onMessage()
      *      - public    thingIdFromWhere()  OpenWebNetDeviceDiscoveryService                --> normalizeWhere().replace(#)
      */
-
+    /*
     public enum TEST {
         zigbee("789309801#9","1","7893098","1.7893098","7893098"),
         sw("51","1","51","1.51","51"),
@@ -588,13 +564,6 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
             this.ownId= ownId;
             this.thing = thing;
         }
-/*
-        @Nullable
-        public static TEST fromValue(String where) {
-            Optional<TEST> t = Arrays.stream(values()).filter(test -> where.equals(test.where)).findFirst();
-            TEST ret = t.orElse(null);
-        }
-*/
     }
 
     private boolean testTransformations() {
@@ -615,9 +584,10 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     }
 
  // @formatter:on
+    */
 
     /**
-     * Normalize a WHERE string for Thermo and Zigbee devices
+     * Normalise a WHERE string for Thermo and Zigbee devices
      */
     public String normalizeWhere(String where) {
         String str = "";

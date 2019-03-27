@@ -45,8 +45,6 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
 
     private final static int SEARCH_TIME = 60;
 
-    // private DiscoveryServiceCallback discoveryServiceCallback;
-
     private final Logger logger = LoggerFactory.getLogger(OpenWebNetDeviceDiscoveryService.class);
     private final OpenWebNetBridgeHandler bridgeHandler;
     private final ThingUID bridgeUID;
@@ -57,11 +55,6 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
         bridgeUID = handler.getThing().getUID();
         logger.debug("==OWN:DeviceDiscovery== constructor for bridge: {}", bridgeUID);
     }
-
-    // @Override
-    // public void setDiscoveryServiceCallback(DiscoveryServiceCallback discoveryServiceCallback) {
-    // this.discoveryServiceCallback = discoveryServiceCallback;
-    // }
 
     @Override
     public Set<ThingTypeUID> getSupportedThingTypes() {
@@ -93,8 +86,8 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
         try {
             newDiscoveryResult(where, deviceType, msg);
         } catch (Exception e) {
-            logger.error("==OWN:DeviceDiscovery== Exception {} while discovering new device:  WHERE={}, deviceType={}",
-                    e.getMessage(), where, deviceType);
+            logger.warn("==OWN:DeviceDiscovery== Exception while discovering new device WHERE={}, deviceType={}: {}",
+                    where, deviceType, e.getMessage());
         }
     }
 
@@ -109,7 +102,7 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
         logger.info("==OWN:DeviceDiscovery== newDiscoveryResult() WHERE={}, deviceType={}", where, deviceType);
         ThingTypeUID thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_DEVICE; // generic device
         String thingLabel = OpenWebNetBindingConstants.THING_LABEL_DEVICE;
-        Who deviceWho = Who.DEVICE_DIAGNOSTIC; // FIXME
+        Who deviceWho = Who.DEVICE_DIAGNOSTIC; // TODO chnage to another Who (unknown?)
         if (deviceType != null) {
             switch (deviceType) {
                 case ZIGBEE_ON_OFF_SWITCH: {
@@ -194,7 +187,7 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
                 }
                 default:
                     logger.warn(
-                            "==OWN:DeviceDiscovery== ***** device type {} is not supported, default to generic device (WHERE={}) *****",
+                            "==OWN:DeviceDiscovery== device type {} is not supported, default to generic device (WHERE={})",
                             deviceType, where);
             }
         }
@@ -202,15 +195,10 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
         ThingUID thingUID = new ThingUID(thingTypeUID, bridgeUID, tId);
 
         DiscoveryResult discoveryResult = null;
-        // check if a device with same thingUID has been found already in discovery results
-        // if (discoveryServiceCallback != null) {
-        // discoveryResult = discoveryServiceCallback.getExistingDiscoveryResult(thingUID);
-        // }
 
         String whereLabel = where;
         if (BaseOpenMessage.UNIT_02.equals(OpenMessageFactory.getUnit(where))) {
             logger.debug("==OWN:DeviceDiscovery== UNIT=02 found (WHERE={})", where);
-            // if (discoveryResult != null) {
             logger.debug("==OWN:DeviceDiscovery== will remove previous result if exists");
             thingRemoved(thingUID); // remove previously discovered thing
             // re-create thingUID with new type
@@ -221,9 +209,6 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
             logger.debug("==OWN:DeviceDiscovery== UNIT=02, switching type from {} to {}",
                     OpenWebNetBindingConstants.THING_TYPE_ON_OFF_SWITCH,
                     OpenWebNetBindingConstants.THING_TYPE_ON_OFF_SWITCH_2UNITS);
-            // } else {
-            // logger.warn("==OWN:DeviceDiscovery== discoveryResult empty after UNIT=02 discovery (WHERE={})", where);
-            // }
         }
         Map<String, Object> properties = new HashMap<>(2);
         properties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_WHERE, bridgeHandler.normalizeWhere(where));

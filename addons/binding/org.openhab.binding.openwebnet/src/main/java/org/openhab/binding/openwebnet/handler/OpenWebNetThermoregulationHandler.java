@@ -42,9 +42,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The {@link OpenWebNetThermoregulationHandler} is responsible for handling commands/messages for a Thermoregulation
- * OpenWebNet
- * device.
- * It extends the abstract {@link OpenWebNetThingHandler}.
+ * OpenWebNet device. It extends the abstract {@link OpenWebNetThingHandler}.
  *
  * @author Massimo Valla - Initial contribution
  */
@@ -130,8 +128,7 @@ public class OpenWebNetThermoregulationHandler extends OpenWebNetThingHandler {
                 logger.warn("==OWN:ThermoHandler== Unsupported ChannelUID {}", channelUID);
             }
         }
-        // TODO
-        // Note: if communication with thing fails for some reason,
+        // TODO if communication with thing fails for some reason,
         // indicate that by setting the status with detail information
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
         // "Could not control device at IP address x.x.x.x");
@@ -158,7 +155,6 @@ public class OpenWebNetThermoregulationHandler extends OpenWebNetThingHandler {
                 bridgeHandler.gateway
                         .send(Thermoregulation.requestWriteSetpoint("#" + deviceWhere, value.floatValue()));
             }
-            // NOT NEEDED ----- updateState(CHANNEL_TEMP_SETPOINT, (DecimalType) command);
         } else {
             logger.warn("==OWN:ThermoHandler== Cannot handle command {} for thing {}", command, getThing().getUID());
             return;
@@ -173,7 +169,7 @@ public class OpenWebNetThermoregulationHandler extends OpenWebNetThingHandler {
                 Mode mode = Mode.valueOf(((StringType) command).toString());
                 modeWhat = modeToWhat(mode);
             } catch (IllegalArgumentException e) {
-                logger.warn("==OWN:ThermoHandler== Cannot handle command {} for thing {} ({})", command,
+                logger.warn("==OWN:ThermoHandler== Cannot handle command {} for thing {}. Exception: {}", command,
                         getThing().getUID(), e.getMessage());
                 return;
             }
@@ -331,7 +327,8 @@ public class OpenWebNetThermoregulationHandler extends OpenWebNetThingHandler {
             temp = Thermoregulation.parseTemperature(tmsg);
             updateState(CHANNEL_TEMPERATURE, new DecimalType(temp));
         } catch (NumberFormatException e) {
-            logger.warn("==OWN:ThermoHandler== NumberFormatException on frame {}: {}", tmsg, e);
+            logger.warn("==OWN:ThermoHandler== updateTemperature() got Exception on frame {}: {}", tmsg,
+                    e.getMessage());
             updateState(CHANNEL_TEMPERATURE, UnDefType.NULL);
         }
     }
@@ -349,8 +346,7 @@ public class OpenWebNetThermoregulationHandler extends OpenWebNetThingHandler {
             temp = Thermoregulation.parseTemperature(tmsg);
             updateState(channelID, new DecimalType(temp));
         } catch (NumberFormatException e) {
-            logger.warn("==OWN:ThermoHandler== updateSetpoint() NumberFormatException on frame {}: {}", tmsg,
-                    e.getMessage());
+            logger.warn("==OWN:ThermoHandler== updateSetpoint() got Exception on frame {}: {}", tmsg, e.getMessage());
             updateState(channelID, UnDefType.NULL);
         }
     }
@@ -362,45 +358,36 @@ public class OpenWebNetThermoregulationHandler extends OpenWebNetThingHandler {
             localOffset = newOffset;
             logger.debug("==OWN:ThermoHandler== updateLocalMode() new localMode={}", localOffset);
             updateState(CHANNEL_LOCAL_MODE, new StringType(localOffset.getLabel()));
-            /*
-             * if (localOffset == Thermoregulation.LOCAL_OFFSET.OFF
-             * || localOffset == Thermoregulation.LOCAL_OFFSET.PROTECTION) {
-             * if (localOffset == Thermoregulation.LOCAL_OFFSET.OFF) {
-             * currentActiveMode = Mode.OFF;
-             * } else {
-             * currentActiveMode = Mode.PROTECTION;
-             * }
-             * updateState(CHANNEL_ACTIVE_MODE, new StringType(currentActiveMode.toString()));
-             * } else {
-             * currentActiveMode = currentSetMode;
-             * updateState(CHANNEL_ACTIVE_MODE, new StringType(currentActiveMode.toString()));
-             * }
-             */
         } else {
             logger.warn("==OWN:ThermoHandler== updateLocalMode() unrecognized local offset: {}", msg);
         }
     }
 
-    // TODO Review with more logs
-    // TODO use constants
     private void updateActuatorStatus(Thermoregulation msg) {
         logger.debug("==OWN:ThermoHandler== updateActuatorStatus() for thing: {}", thing.getUID());
         int actuator = msg.getActuator();
         if (actuator == 1) {
-            updateState(CHANNEL_HEATING, (msg.getActuatorStatus(actuator) == 1 ? OnOffType.ON : OnOffType.OFF));
+            updateState(CHANNEL_HEATING,
+                    (msg.getActuatorStatus(actuator) == Thermoregulation.ACTUATOR_STATUS_ON ? OnOffType.ON
+                            : OnOffType.OFF));
         } else if (actuator == 2) {
-            updateState(CHANNEL_COOLING, (msg.getActuatorStatus(actuator) == 1 ? OnOffType.ON : OnOffType.OFF));
+            updateState(CHANNEL_COOLING,
+                    (msg.getActuatorStatus(actuator) == Thermoregulation.ACTUATOR_STATUS_ON ? OnOffType.ON
+                            : OnOffType.OFF));
+        } else {
+            logger.warn("==OWN:ThermoHandler== actuator number {} is not handled for thing: {}", actuator,
+                    thing.getUID());
         }
     }
 
-    private void updateTargetTemp(Thermoregulation msg) {
+    private void updateTargetTemp(Thermoregulation tmsg) {
         logger.debug("==OWN:ThermoHandler== updateTargetTemp() for thing: {}", thing.getUID());
         Double temp;
         try {
-            temp = Thermoregulation.parseTemperature(msg);
+            temp = Thermoregulation.parseTemperature(tmsg);
             updateState(CHANNEL_TEMP_TARGET, new DecimalType(temp));
         } catch (NumberFormatException e) {
-            logger.warn("==OWN:ThermoHandler== NumberFormatException on frame {}: {}", msg, e);
+            logger.warn("==OWN:ThermoHandler== updateTargetTemp() got Exception on frame {}: {}", tmsg, e.getMessage());
             updateState(CHANNEL_TEMP_TARGET, UnDefType.NULL);
         }
     }

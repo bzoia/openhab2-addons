@@ -154,12 +154,9 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
                     label = "BUS Gateway " + devInfo.friendlyName + " (" + devInfo.host + ", v" + devInfo.modelNumber
                             + ")";
                 } catch (Exception e) {
-                    // ignore and use default label
+                    logger.warn("==OWN:UPnP== Exception while getting devInfo for device UDN={}. Exception={}",
+                            devInfo.udn, e.getMessage());
                 }
-                // properties.put(UDN, device.getIdentity().getUdn().getIdentifierString());
-                // DiscoveryResult result =
-                // DiscoveryResultBuilder.create(uid).withProperties(properties).withLabel(label)
-                // .withRepresentationProperty(UDN).build();
                 properties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_HOST, devInfo.host);
                 properties.put(OpenWebNetBindingConstants.PROPERTY_FIRMWARE, devInfo.modelNumber);
                 properties.put(OpenWebNetBindingConstants.PROPERTY_MODEL, devInfo.modelName);
@@ -205,4 +202,4 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
         return null;
     }
 
-} /* class */
+} // class

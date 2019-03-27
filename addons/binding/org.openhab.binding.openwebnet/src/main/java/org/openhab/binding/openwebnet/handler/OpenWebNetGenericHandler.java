@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The {@link OpenWebNetGenericHandler} is responsible for handling Generic OpenWebNet
- * devices. Basically is does not do anything, but is needed to avoid handler errors.
+ * devices. It does not too much, but it is needed to avoid handler errors.
  * It extends the abstract {@link OpenWebNetThingHandler}.
  *
  * @author Massimo Valla - Initial contribution
@@ -50,14 +50,14 @@ public class OpenWebNetGenericHandler extends OpenWebNetThingHandler {
 
     @Override
     protected void requestChannelState(ChannelUID channel) {
-        logger.warn("==OWN:GenericHandler== There are no channels here!");
         // do nothing
+        logger.warn("==OWN:GenericHandler== There are no channels here!");
     }
 
     @Override
     protected void handleChannelCommand(ChannelUID channel, Command command) {
-        logger.warn("==OWN:GenericHandler== There are no channels here!");
         // do nothing
+        logger.warn("==OWN:GenericHandler== There are no channels here!");
     }
 
     @Override
@@ -68,8 +68,8 @@ public class OpenWebNetGenericHandler extends OpenWebNetThingHandler {
     @Override
     protected void handleMessage(BaseOpenMessage msg) {
         super.handleMessage(msg);
-        logger.warn("==OWN:GenericHandler== Nothing to do!");
         // do nothing
+        logger.warn("==OWN:GenericHandler== Nothing to do!");
     }
 
 } // class

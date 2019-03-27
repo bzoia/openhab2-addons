@@ -48,7 +48,8 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
     protected Lighting.Type lightingType = Lighting.Type.ZIGBEE;
 
     private double lastBrightnessChangeSentTS = 0; // timestamp when last brightness change was sent to the device
-    private static final int BRIGHTNESS_CHANGE_DELAY = 1500; // ms delay to wait before sending a brightness status
+    private static final int BRIGHTNESS_CHANGE_DELAY = 1500; // ms delay to wait before sending another brightness
+                                                             // status
                                                              // request
 
     private boolean brightnessLevelRequested = false; // was the brightness level requested ?
@@ -92,8 +93,7 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
                 logger.warn("==OWN:LightingHandler== Unsupported channel UID {}", channel);
             }
         }
-        // TODO
-        // Note: if communication with thing fails for some reason,
+        // TODO if communication with thing fails for some reason,
         // indicate that by setting the status with detail information
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
         // "Could not control device at IP address x.x.x.x");
@@ -142,10 +142,13 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
                 dimLightTo(0, command);
             }
         }
-        // FIXME DEBUG MODE: this is the other channel (level)
-        else if (command instanceof DecimalType) {
-            dimLightTo(((DecimalType) command).intValue(), command);
-        } else {
+        // DEBUG MODE: this is the other channel (level)
+        /*
+         * else if (command instanceof DecimalType) {
+         * dimLightTo(((DecimalType) command).intValue(), command);
+         * }
+         */
+        else {
             logger.warn("==OWN:LightingHandler== Cannot handle command {} for thing {}", command, getThing().getUID());
             return;
         }
@@ -215,7 +218,7 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
     }
 
     /**
-     * Updates light state based on a Lighting message received from the OWN network
+     * Updates light state based on a OWN Lighting message received
      */
     private void updateLightState(Lighting msg) {
         logger.debug("==OWN:LightingHandler== updateLightState() for thing: {}", thing.getUID());
@@ -228,7 +231,7 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
     }
 
     /**
-     * Updates on/off state based on a Lighting message received from the OWN network
+     * Updates on/off state based on a OWN Lighting message received
      */
     private void updateLightOnOffState(Lighting msg) {
         String channelID;
@@ -253,7 +256,7 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
     }
 
     /**
-     * Updates brightness level based on a Lighting message received from the OWN network
+     * Updates brightness level based on a OWN Lighting message received
      */
     private synchronized void updateLightBrightnessState(Lighting msg) {
         final String channel = CHANNEL_BRIGHTNESS;
@@ -277,7 +280,7 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
             }
         } else {
             logger.debug("$bri update from network -> level should be present in WHAT part of the message");
-            if (msg.getWhat() != null) { // cmd
+            if (msg.getWhat() != null) {
                 int newLevel = msg.getWhat().value();
                 logger.debug("$bri current level={} ----> new level={}", latestBrightnessWhat, newLevel);
                 if (latestBrightnessWhat != newLevel) {

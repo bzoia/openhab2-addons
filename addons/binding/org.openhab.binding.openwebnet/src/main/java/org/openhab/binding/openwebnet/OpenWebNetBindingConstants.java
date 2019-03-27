@@ -20,8 +20,7 @@ import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import com.google.common.collect.Sets;
 
 /**
- * The {@link OpenWebNetBindingConstants} class defines common constants, which are
- * used across the whole binding.
+ * The {@link OpenWebNetBindingConstants} class defines common constants, which are used across the whole binding.
  *
  * @author Massimo Valla - Initial contribution
  */

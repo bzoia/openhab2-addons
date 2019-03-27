@@ -39,9 +39,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link OpenWebNetAutomationHandler} is responsible for handling commands/messages for a Automation OpenWebNet
- * device.
- * It extends the abstract {@link OpenWebNetThingHandler}.
+ * The {@link OpenWebNetAutomationHandler} is responsible for handling commands/messages for an Automation OpenWebNet
+ * device. It extends the abstract {@link OpenWebNetThingHandler}.
  *
  * @author Massimo Valla - Initial contribution
  */
@@ -53,8 +52,6 @@ public class OpenWebNetAutomationHandler extends OpenWebNetThingHandler {
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = OpenWebNetBindingConstants.AUTOMATION_SUPPORTED_THING_TYPES;
 
     protected Automation.Type automationType = Automation.Type.ZIGBEE;
-
-    // private ChannelUID deviceChannel;
 
     // internal states
     public static final int STATE_STOPPED = 0;
@@ -87,8 +84,8 @@ public class OpenWebNetAutomationHandler extends OpenWebNetThingHandler {
     private static final int STEP_TIME_MIN = 50; // ms
     private Command commandRequestedWhileMoving = null;
 
-    /// TODO GENERAL
-    /// consider making all Automation calls Aynch insted of Synch (blocking), as all the behavior is based on received
+    /// TODO consider making all Automation calls Asynch insted of Synch (blocking), as all the behavior is based on
+    /// received
     /// state notifications and not on command responses
 
     public OpenWebNetAutomationHandler(@NonNull Thing thing) {
@@ -103,15 +100,6 @@ public class OpenWebNetAutomationHandler extends OpenWebNetThingHandler {
         if (!bridgeHandler.isBusGateway()) {
             deviceWhere = deviceWhere + BaseOpenMessage.UNIT_01;
         }
-        /*
-         * Channel ch = thing.getChannel(CHANNEL_SHUTTER);
-         * if (ch != null) {
-         * deviceChannel = ch.getUID();
-         * } else {
-         * logger.warn("==OWN:AutomationHandler== Cannot get channel in initialize()");
-         * return;
-         * }
-         */
         if (bridgeHandler != null && bridgeHandler.isBusGateway()) {
             automationType = Automation.Type.POINT_TO_POINT;
         }
@@ -165,8 +153,7 @@ public class OpenWebNetAutomationHandler extends OpenWebNetThingHandler {
                 logger.warn("==OWN:AutomationHandler== Unsupported channel UID {}", channel);
             }
         }
-        // TODO
-        // Note: if communication with thing fails for some reason,
+        // TODO if communication with thing fails for some reason,
         // indicate that by setting the status with detail information
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
         // "Could not control device at IP address x.x.x.x");
@@ -235,7 +222,7 @@ public class OpenWebNetAutomationHandler extends OpenWebNetThingHandler {
                 // calculate how much time we have to move and set a deadline to stop after that time
                 int moveTime = Math.round(((float) Math.abs(percent - positionEst) / POSITION_MAX_STEPS * shutterRun));
                 logger.debug("==OWN:AutomationHandler== # " + deviceWhere + " # target moveTime={}", moveTime);
-                if (moveTime > STEP_TIME_MIN) { // FIXME calibrate this
+                if (moveTime > STEP_TIME_MIN) { // TODO calibrate this
                     if (moveSchedule != null && !moveSchedule.isDone()) {
                         // a moveSchedule was already scheduled and is not done... let's cancel the schedule
                         moveSchedule.cancel(false);
