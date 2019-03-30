@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link BusGatewayUpnpDiscovery} is responsible for discovering new and removed supported BTicino BUS
+ * The {@link BusGatewayUpnpDiscovery} is responsible for discovering supported BTicino BUS
  * gateways devices using UPnP. It uses the central {@link UpnpDiscoveryService} implementing
  * {@link UpnpDiscoveryParticipant}.
  *
@@ -75,7 +75,7 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
     }
 
     /**
-     * DeviceInfo bean to store device useful info and log them
+     * DeviceInfo bean to store device useful info (and log them)
      */
     public class DeviceInfo {
         private String friendlyName = "<unknown>";
@@ -89,25 +89,25 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
         private boolean isBTicino = false;
 
         private DeviceInfo(RemoteDevice device) {
-            logger.info("+=== UPnP =========================================");
+            logger.debug("+=== UPnP =========================================");
             RemoteDeviceIdentity identity = device.getIdentity();
             if (identity != null) {
                 this.udn = identity.getUdn();
-                logger.info("| ID.UDN       : {}", udn);
+                logger.debug("| ID.UDN       : {}", udn);
                 if (identity.getDescriptorURL() != null) {
-                    logger.info("| ID.DESC URL  : {}", identity.getDescriptorURL());
+                    logger.debug("| ID.DESC URL  : {}", identity.getDescriptorURL());
                     this.host = identity.getDescriptorURL().getHost();
                 }
-                logger.info("| ID.MAX AGE : {}", identity.getMaxAgeSeconds());
-                // logger.info("| ID.LOC_ADDR : {}", identity.getDiscoveredOnLocalAddress());
+                logger.debug("| ID.MAX AGE : {}", identity.getMaxAgeSeconds());
+                // logger.debug("| ID.LOC_ADDR : {}", identity.getDiscoveredOnLocalAddress());
             }
-            logger.info("| --------------");
+            logger.debug("| --------------");
             DeviceDetails details = device.getDetails();
             if (details != null) {
                 ManufacturerDetails manufacturerDetails = details.getManufacturerDetails();
                 if (manufacturerDetails != null) {
                     this.manufacturer = manufacturerDetails.getManufacturer();
-                    logger.info("| MANUFACTURER : {} ({})", manufacturer, manufacturerDetails.getManufacturerURI());
+                    logger.debug("| MANUFACTURER : {} ({})", manufacturer, manufacturerDetails.getManufacturerURI());
                     if (manufacturer != null && manufacturer.toUpperCase().contains("BTICINO")) {
                         this.isBTicino = true;
                     }
@@ -118,20 +118,20 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
                     this.modelName = modelDetails.getModelName();
                     this.modelDescription = modelDetails.getModelDescription();
                     this.modelNumber = modelDetails.getModelNumber();
-                    logger.info("| MODEL        : {} | {} | {} ({})", modelName, modelDescription, modelNumber,
+                    logger.debug("| MODEL        : {} | {} | {} ({})", modelName, modelDescription, modelNumber,
                             modelDetails.getModelURI());
                 }
                 if (isBTicino) {
                     this.friendlyName = details.getFriendlyName();
-                    logger.info("| FRIENDLY NAME: {}", friendlyName);
+                    logger.debug("| FRIENDLY NAME: {}", friendlyName);
                     this.serialNumber = details.getSerialNumber();
-                    logger.info("| SERIAL #     : {}", serialNumber);
-                    logger.info("| BASE URL     : {}", details.getBaseURL());
-                    logger.info("| UPC          : {}", details.getUpc());
-                    logger.info("| PRES. URI    : {}", details.getPresentationURI());
+                    logger.debug("| SERIAL #     : {}", serialNumber);
+                    logger.debug("| BASE URL     : {}", details.getBaseURL());
+                    logger.debug("| UPC          : {}", details.getUpc());
+                    // logger.debug("| PRES. URI : {}", details.getPresentationURI());
                 }
             }
-            logger.info("+==================================================");
+            logger.debug("+==================================================");
         }
 
     } /* DeviceInfo */
@@ -163,7 +163,7 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
                 properties.put(OpenWebNetBindingConstants.PROPERTY_SERIAL_NO, devInfo.serialNumber);
                 DiscoveryResult result = DiscoveryResultBuilder.create(thingId).withProperties(properties)
                         .withLabel(label).build();
-                logger.info("==OWN:UPnP== Created a DiscoveryResult for gatway '{}' (UDN={})", devInfo.friendlyName,
+                logger.info("==OWN:UPnP== Created a DiscoveryResult for gateway '{}' (UDN={})", devInfo.friendlyName,
                         devInfo.udn.getIdentifierString());
                 return result;
             } else {
@@ -177,7 +177,7 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
 
     @Override
     public @Nullable ThingUID getThingUID(RemoteDevice device) {
-        logger.info("==OWN:UPnP== getThingUID()");
+        logger.debug("==OWN:UPnP== getThingUID()");
         return generateThingUID(new DeviceInfo(device));
     }
 
