@@ -12,15 +12,16 @@
 		<properties>
 			<property name="vendor">BTicino/Legrand</property>
 			<property name="model">BTI-3578/088328</property>
-			<property name="firmwareVersion"></property>
+			<property name="firmwareVersion">Unknown</property>
 		</properties>
 
         <representation-property>ownId</representation-property>
 			
-		<config-description>
+		<config-description>          
 			<parameter name="serialPort" type="text">
-				<label>serialPort</label>
-				<description>Serial port to which the USB dongle is connected. Example: COM3 (Win), /dev/ttyUSB0 (Linux), etc.</description>
+				<label>Serial Port</label>
+				<context>serial-port</context>
+				<description>Serial port where OpenWebNet Zigbee USB dongle is connected. Example: COM3 (Win), /dev/ttyUSB0 (Linux), etc.</description>
 				<required>true</required>
 			</parameter>
 		</config-description>
