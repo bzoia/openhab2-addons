@@ -433,8 +433,10 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
 **v2.5.0.M3 =IN PROGRESS=** - dd/mm/2019
 - [FIX #30] manually configured things are now ignored during auto-discovery
 - [FIX #74] Updated README with energy example
-- Checked licence headers & javadocs. Improved logging
+- checked licence headers & javadocs. Improved logging
 - removed logging INFO when discovering devices via UPnP
+- firmware ver. and MAC address are now read from BUS gateway
+- BUS gateway MAC addr. used as serialNumber (representation-property) to avoid discovery of same gateway that was added manually
 - debug messages for ZB connect/connectDongle
 
 **v2.5.0.M2-1** - 20/03/2019

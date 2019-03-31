@@ -143,7 +143,7 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
 
     @Override
     public @Nullable DiscoveryResult createResult(RemoteDevice device) {
-        logger.info("==OWN:UPnP== createResult() device={}", device);
+        logger.info("==OWN:UPnP== Found device: {}", device.getType());
         DeviceInfo devInfo = new DeviceInfo(device);
         ThingUID thingId = generateThingUID(devInfo);
         if (thingId != null) {
@@ -158,11 +158,12 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
                             devInfo.udn, e.getMessage());
                 }
                 properties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_HOST, devInfo.host);
-                properties.put(OpenWebNetBindingConstants.PROPERTY_FIRMWARE, devInfo.modelNumber);
+                properties.put(OpenWebNetBindingConstants.PROPERTY_FIRMWARE_VERSION, devInfo.modelNumber);
                 properties.put(OpenWebNetBindingConstants.PROPERTY_MODEL, devInfo.modelName);
                 properties.put(OpenWebNetBindingConstants.PROPERTY_SERIAL_NO, devInfo.serialNumber);
                 DiscoveryResult result = DiscoveryResultBuilder.create(thingId).withProperties(properties)
-                        .withLabel(label).build();
+                        .withRepresentationProperty(OpenWebNetBindingConstants.PROPERTY_SERIAL_NO).withLabel(label)
+                        .build();
                 logger.info("==OWN:UPnP== Created a DiscoveryResult for gateway '{}' (UDN={})", devInfo.friendlyName,
                         devInfo.udn.getIdentifierString());
                 return result;
@@ -177,7 +178,7 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
 
     @Override
     public @Nullable ThingUID getThingUID(RemoteDevice device) {
-        logger.debug("==OWN:UPnP== getThingUID()");
+        // logger.debug("==OWN:UPnP== getThingUID()");
         return generateThingUID(new DeviceInfo(device));
     }
 

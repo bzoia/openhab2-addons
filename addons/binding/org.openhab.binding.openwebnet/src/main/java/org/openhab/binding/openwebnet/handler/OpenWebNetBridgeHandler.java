@@ -402,6 +402,8 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     @Override
     public void onConnected() {
         isGatewayConnected = true;
+        Map<String, String> properties = editProperties();
+        boolean propertiesChanged = false;
         if (gateway instanceof OpenGatewayZigBee) {
             logger.info("==OWN== ------------------- CONNECTED to ZigBee gateway - USB port: {}",
                     ((OpenGatewayZigBee) gateway).getConnectedPort());
@@ -409,12 +411,26 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
             logger.info("==OWN== ------------------- CONNECTED to BUS gateway - {}:{}",
                     ((OpenGatewayBus) gateway).getHost(), ((OpenGatewayBus) gateway).getPort());
             // update gw model
-            String currentGwModel = (editProperties().get(PROPERTY_MODEL));
-            // String currentGwModel = (String) (getConfig().get(PROPERTY_MODEL));
-            if (currentGwModel == null || currentGwModel.equals("Unknown")) {
-                updateProperty(PROPERTY_MODEL, ((OpenGatewayBus) gateway).getModelName());
-                logger.debug("==OWN== updated gw model: {}", ((OpenGatewayBus) gateway).getModelName());
+            if (properties.get(PROPERTY_MODEL) != ((OpenGatewayBus) gateway).getModelName()) {
+                properties.put(PROPERTY_MODEL, ((OpenGatewayBus) gateway).getModelName());
+                propertiesChanged = true;
+                logger.debug("==OWN== updated property gw model: {}", properties.get(PROPERTY_MODEL));
             }
+            // update serial number (with MAC address)
+            if (properties.get(PROPERTY_SERIAL_NO) != gateway.getMACAddrAsString().toUpperCase()) {
+                properties.put(PROPERTY_SERIAL_NO, gateway.getMACAddrAsString().toUpperCase());
+                propertiesChanged = true;
+                logger.debug("==OWN== updated property gw serialNumber: {}", properties.get(PROPERTY_SERIAL_NO));
+            }
+        }
+        if (properties.get(PROPERTY_FIRMWARE_VERSION) != gateway.getFirmwareVersion()) {
+            properties.put(PROPERTY_FIRMWARE_VERSION, gateway.getFirmwareVersion());
+            propertiesChanged = true;
+            logger.debug("==OWN== updated property gw firmware version: {}", properties.get(PROPERTY_FIRMWARE_VERSION));
+        }
+        if (propertiesChanged) {
+            updateProperties(properties);
+            logger.info("==OWN== properties updated for {}", getThing().getBridgeUID());
         }
         updateStatus(ThingStatus.ONLINE);
     }
@@ -474,6 +490,12 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
         logger.info("==OWN== ------------------- RE-CONNECTED to gateway!");
         updateStatus(ThingStatus.ONLINE);
         logger.debug("==OWN== Bridge status set to ONLINE");
+        logger.debug("==OWN== checking firmware version");
+        gateway.send(GatewayManagement.requestFirmwareVersion());
+        if (gateway.getFirmwareVersion() != null) {
+            this.updateProperty(PROPERTY_FIRMWARE_VERSION, gateway.getFirmwareVersion());
+            logger.debug("==OWN== gw firmware version: {}", gateway.getFirmwareVersion());
+        }
         // TODO refresh devices' status?
     }
 

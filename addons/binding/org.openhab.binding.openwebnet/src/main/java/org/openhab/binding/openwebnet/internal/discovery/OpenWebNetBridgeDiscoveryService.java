@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The {@link OpenWebNetBridgeDiscoveryService} is a {@link DiscoveryService} implementation responsible for discovering
- * OpenWebNet gateways in the network (using UPnP) and OpwenWebNet devices.
+ * OpenWebNet (Zigbee) gateways in the network.
  *
  * @author Massimo Valla - Initial contribution
  */
@@ -47,8 +47,6 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
     private final Logger logger = LoggerFactory.getLogger(OpenWebNetBridgeDiscoveryService.class);
 
     private final static int DISCOVERY_TIMEOUT = 30; // seconds
-
-    // private OpenWebNetBridgeHandler bthandler; //not needed
 
     // TODO support multiple dongles at the same time
     private OpenGatewayZigBee zbgateway;
@@ -111,11 +109,11 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
         dongleUID = new ThingUID(OpenWebNetBindingConstants.THING_TYPE_DONGLE, Integer.toString(dongleAddr));
         Map<String, Object> dongleProperties = new HashMap<>(2);
         dongleProperties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_SERIAL_PORT, zbgateway.getConnectedPort());
-        dongleProperties.put(OpenWebNetBindingConstants.PROPERTY_FIRMWARE, zbgateway.getDongleFirmwareVersion());
+        dongleProperties.put(OpenWebNetBindingConstants.PROPERTY_FIRMWARE_VERSION, zbgateway.getFirmwareVersion());
 
         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(dongleUID).withProperties(dongleProperties)
                 .withLabel(OpenWebNetBindingConstants.THING_LABEL_DONGLE + " (ID=" + dongleAddr + ", "
-                        + zbgateway.getConnectedPort() + ", v=" + zbgateway.getDongleFirmwareVersion() + ")")
+                        + zbgateway.getConnectedPort() + ", v=" + zbgateway.getFirmwareVersion() + ")")
                 .build();
         logger.info("==OWN:BridgeDiscovery== --- DONGLE thing discovered: {}", discoveryResult.getLabel());
         thingDiscovered(discoveryResult);
