@@ -70,6 +70,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     private static final int GATEWAY_ONLINE_TIMEOUT = 20; // (sec) Time to wait for the gateway to become connected
     private static final int CONFIG_GATEWAY_DEFAULT_PORT = 20000;
     private static final String CONFIG_GATEWAY_DEFAULT_PASSWD = "12345";
+    private static final boolean CONFIG_GATEWAY_DEFAULT_DISCVERY_ACTIVATION = false;
 
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = OpenWebNetBindingConstants.BRIDGE_SUPPORTED_THING_TYPES;
 
@@ -87,8 +88,10 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     public OpenWebNetDeviceDiscoveryService deviceDiscoveryService;
     private boolean searchingGatewayDevices = false; // devices search is in progress on gateway
     private boolean scanIsActive = false; // a device scan has been activated by OpenWebNetDeviceDiscoveryService;
-    private boolean discoveryByActivation = false; // discover BUS devices when they are activated also when a device
-                                                   // scan is not active
+    private boolean discoveryByActivation = CONFIG_GATEWAY_DEFAULT_DISCVERY_ACTIVATION; // discover BUS devices when
+                                                                                        // they are activated also when
+                                                                                        // a device
+    // scan is not active
     @Nullable
     private OpenNewDeviceListener deviceDiscoveryListener = null;
 
@@ -179,6 +182,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
             Object portConfig = getConfig().get(CONFIG_PROPERTY_PORT);
             if (portConfig != null) {
                 port = ((BigDecimal) portConfig).intValue();
+                // TODO handle case parameter is not a number
             }
             String passwd = (String) (getConfig().get(CONFIG_PROPERTY_PASSWD));
             if (passwd == null) {
@@ -190,10 +194,20 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
             } else {
                 passwdMasked = "******";
             }
-            String discoveryConfig = (String) getConfig().get(CONFIG_PROPERTY_DISCOVERY_ACTIVATION);
-            if (discoveryConfig != null && discoveryConfig.equalsIgnoreCase("true")) {
-                discoveryByActivation = true;
+            Object discoveryConfig = getConfig().get(CONFIG_PROPERTY_DISCOVERY_ACTIVATION);
+            if (discoveryConfig != null) {
+                if (discoveryConfig instanceof java.lang.Boolean) {
+                    discoveryByActivation = (boolean) getConfig().get(CONFIG_PROPERTY_DISCOVERY_ACTIVATION);
+                    logger.debug("==OWN== discoveryByActivation={}", discoveryByActivation);
+                } else {
+                    logger.warn(
+                            "==OWN== invalid discoveryByActivation parameter value (should be true/false). Keeping current value={}.",
+                            discoveryByActivation);
+                }
             }
+            // if (discoveryConfig != null && discoveryConfig.equalsIgnoreCase("true")) {
+            // discoveryByActivation = true;
+            // }
             logger.debug("==OWN== Creating new BUS gateway with config properties: {}:{}, pwd={}", host, port,
                     passwdMasked);
             gateway = OpenWebNet.gatewayBus(host, port, passwd);
@@ -323,8 +337,8 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     /**
      * Register a device ThingHandler to this BridgHandler
      *
-     * @param String                 ownId device OpenWebNet id
-     * @param OpenWebNetThingHandler thingHandler to register
+     * @param ownId        the device OpenWebNet id
+     * @param thingHandler the thing handler to be registered
      */
     protected void registerDevice(String ownId, OpenWebNetThingHandler thingHandler) {
         if (registeredDevices.containsKey(ownId)) {
@@ -338,7 +352,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     /**
      * Un-register a device from this bridge handler
      *
-     * @param ownId device OpenWebNet id
+     * @param ownId the device OpenWebNet id
      */
     protected void unregisterDevice(String ownId) {
         if (registeredDevices.remove(ownId) != null) {
@@ -351,9 +365,8 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     /**
      * Get a ThingHandler for a device associated to this BridgeHandler, based on ownID
      *
-     * @param String ownId OpenWebNet id for device
-     * @returns OpenWebNetThingHandler handler for the device, or null if the device is not associated with this
-     *          BridgeHanldler
+     * @param ownId OpenWebNet id for device
+     * @returns an handler for the device, or null if the device is not associated with this BridgeHanldler
      */
     private @Nullable OpenWebNetThingHandler getDevice(String ownId) {
         return registeredDevices.get(ownId);
@@ -408,7 +421,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
             logger.info("==OWN== ------------------- CONNECTED to ZigBee gateway - USB port: {}",
                     ((OpenGatewayZigBee) gateway).getConnectedPort());
         } else {
-            logger.info("==OWN== ------------------- CONNECTED to BUS gateway - {}:{}",
+            logger.info("==OWN== ------------------- CONNECTED to BUS gateway '{}' ({}:{})", thing.getUID(),
                     ((OpenGatewayBus) gateway).getHost(), ((OpenGatewayBus) gateway).getPort());
             // update gw model
             if (properties.get(PROPERTY_MODEL) != ((OpenGatewayBus) gateway).getModelName()) {
@@ -430,7 +443,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
         }
         if (propertiesChanged) {
             updateProperties(properties);
-            logger.info("==OWN== properties updated for {}", getThing().getBridgeUID());
+            logger.info("==OWN== properties updated for '{}'", thing.getUID());
         }
         updateStatus(ThingStatus.ONLINE);
     }
@@ -500,21 +513,23 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     }
 
     /**
-     * Return a ownId string (=WHO.WHERE) from a deviceWhere thing config parameter and ThingHandler.
-     * In case of ZigBee gateway, ownId=Z.ADDR
+     * Return a ownId string (=WHO.WHERE) from a deviceWhere thing config parameter and its handler.
      *
-     * @param String                 deviceWhere
-     * @param OpenWebNetThingHandler thing handler
-     * @return ownId string
+     * @param deviceWhere
+     * @param handler     the thing handler
+     * @return the ownId
      */
     protected String ownIdFromDeviceWhere(String deviceWhere, OpenWebNetThingHandler handler) {
-        if (isBusGateway) {
-            return handler.ownIdPrefix() + "." + deviceWhere;
-        } else {
-            return "Z" + "." + deviceWhere;
-        }
+        return handler.ownIdPrefix() + "." + deviceWhere;
     }
 
+    /**
+     * Returns a ownId string (=WHO.WHERE) from a WHERE address and WHO
+     *
+     * @param where the WHERE address
+     * @param who   the WHO
+     * @return the ownId
+     */
     public String ownIdFromWhoWhere(String where, String who) {
         return who + "." + normalizeWhere(where);
     }
@@ -522,8 +537,8 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     /**
      * Return a ownId string (=WHO.WHERE) from a BaseOpenMessage
      *
-     * @param BaseOpenMessage baseMsg message
-     * @return ownId String
+     * @param baseMsg the message
+     * @return the ownId String
      */
     private String ownIdFromMessage(BaseOpenMessage baseMsg) {
         return baseMsg.getWho().value() + "." + normalizeWhere(baseMsg.getWhere());
@@ -533,8 +548,8 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
      * Transform a WHERE string address into a Thing id string based on bridge type (BUS/ZigBee).
      * '#' in WHERE are changed to 'h'
      *
-     * @param String where WHERE address
-     * @return String thing Id
+     * @param where the WHERE address
+     * @return the thing Id
      */
     public String thingIdFromWhere(String where) {
         return normalizeWhere(where).replace('#', 'h'); // '#' cannot be used in ThingUID;
@@ -543,30 +558,31 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     // @formatter:off
     /**
      *
-     *                              deviceWhere (DevAddrParam)
-     * TYPE         WHERE           normalizeWhere   ownId       ThingID
+     *                              deviceWhere
+     *                              (DevAddrParam)
+     * TYPE         WHERE           normalizeWhere()  ownId       ThingID
      * ---------------------------------------------------------------
-     * Zigbee       789309801#9     7893098          Z.7893098   7893098   (*)
-     * Switch       51              51               1.51        51
-     * Dimmer       25#4#01         25#4#01          1.25#4#01   25h4h01   (*)
-     * Autom        93              93               2.93        93
-     * Thermo       #1 or 1         1                4.1         1         (*)
-     * TempSen      500             500              4.500       500
-     * Energy       51              51               18.51       51
-     * CEN          51              51               15.51       51
-     * CEN+         212             212              25.212      212
-     * DryContact   399             399              25.399      399
+     * Zigbee       789309801#9     7893098           1.7893098   7893098
+     * Switch       51              51                1.51        51
+     * Dimmer       25#4#01         25#4#01           1.25#4#01   25h4h01
+     * Autom        93              93                2.93        93
+     * Thermo       #1 or 1         1                 4.1         1
+     * TempSen      500             500               4.500       500
+     * Energy       51              51                18.51       51
+     * CEN          51              51                15.51       51
+     * CEN+         212             212               25.212      212
+     * DryContact   399             399               25.399      399
      *
      *        METHOD                            CALLED FROM                                     CALLING
      *        ------                            -----------                                     -------
-     *      - OpenWebNetDeviceDiscoveryService new discovery result                         --> deviceWhere = normalizeWhere()
-     *      - ThingHandler.initialize                                                       --> ownId = ownIdFromDeviceWhere()
-     *      - public    normalizeWhere()        locally and OpenWebNetDeviceDiscoveryService    --> getAddrFromWhere
-     *      - public    getAddrFromWhere                                                    --> remove last 4
+     *      - OpenWebNetDeviceDiscoveryService new discovery result                             --> deviceWhere = normalizeWhere()
+     *      - ThingHandler.initialize                                                           --> ownId = ownIdFromDeviceWhere()
+     *      - public    normalizeWhere()        locally and OpenWebNetDeviceDiscoveryService    --> getAddrFromWhere()
+     *      - public    getAddrFromWhere()                                                      --> remove last 4
      *      - protected ownIdFromDeviceWhere()  ThingHandler.initialize                         --> ownIdPrefix() + "." + deviceWhere
 
-     *      - private   ownIdFromMessage()  onMessage()
-     *      - public    thingIdFromWhere()  OpenWebNetDeviceDiscoveryService                --> normalizeWhere().replace(#)
+     *      - private   ownIdFromMessage()      onMessage()
+     *      - public    thingIdFromWhere()      OpenWebNetDeviceDiscoveryService                --> normalizeWhere().replace(#)
      */
     /*
     public enum TEST {
@@ -609,7 +625,10 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     */
 
     /**
-     * Normalise a WHERE string for Thermo and Zigbee devices
+     * Normalize a WHERE address for Thermo and Zigbee devices
+     * 
+     * @param where the WHERE address
+     * @return the normalized WHERE
      */
     public String normalizeWhere(String where) {
         String str = "";

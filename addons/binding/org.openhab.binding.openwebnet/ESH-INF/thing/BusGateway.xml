@@ -39,10 +39,11 @@
 				<required>false</required>
 			</parameter>
 
-            <parameter name="discoveryByActivation" type="text">
+            <parameter name="discoveryByActivation" type="boolean">
                 <label>Discovery By Activation</label>
-                <description>Discover BUS devices when they are activated (also when a device scan is not active)</description>
+                <description>Discover BUS devices when they are activated (also when a device scan is not active) (default: false)</description>
                 <required>false</required>
+                <default>false</default>
             </parameter>
             
 		</config-description>

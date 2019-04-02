@@ -182,11 +182,15 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
         return generateThingUID(new DeviceInfo(device));
     }
 
-    /** generate a ThingUID from already extracted DeviceInfo */
+    /**
+     * Returns a ThingUID from already extracted DeviceInfo
+     * 
+     * @param devInfo the device info
+     * @return a new ThingUID
+     */
     private @Nullable ThingUID generateThingUID(DeviceInfo devInfo) {
         if (devInfo != null && devInfo.isBTicino) {
             String idString = devInfo.udn.getIdentifierString();
-            // uuid:pnp-scheduler-1_0-00:03:50:8F:59:48
             BusGatewayId gwId = BusGatewayId.fromValue(idString.split("-")[1]);
             if (gwId != null) {
                 logger.debug("==OWN:UPnP== '{}' is a supported gateway", gwId);

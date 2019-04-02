@@ -100,10 +100,10 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
     }
 
     /**
-     * Handles Lighting switch command
+     * Handles Lighting switch command for a channel
      *
-     * @param channel
-     * @param command
+     * @param channel the channel
+     * @param command the command
      */
     private void handleSwitchCommand(ChannelUID channel, Command command) {
         logger.debug("==OWN:LightingHandler== handleSwitchCommand() (command={} - channel={})", command, channel);
@@ -122,7 +122,7 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
     /**
      * Handles Lighting brightness command (ON, OFF, xx%, INCREASE, DECREASE)
      *
-     * @param command
+     * @param command the command
      */
     private void handleBrightnessCommand(Command command) {
         logger.debug("==OWN:LightingHandler== handleBrightnessCommand() (command={})", command);
@@ -219,6 +219,8 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
 
     /**
      * Updates light state based on a OWN Lighting message received
+     *
+     * @param msg the Lighting message received
      */
     private void updateLightState(Lighting msg) {
         logger.debug("==OWN:LightingHandler== updateLightState() for thing: {}", thing.getUID());
@@ -232,6 +234,8 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
 
     /**
      * Updates on/off state based on a OWN Lighting message received
+     *
+     * @param msg the Lighting message received
      */
     private void updateLightOnOffState(Lighting msg) {
         String channelID;
@@ -257,6 +261,8 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
 
     /**
      * Updates brightness level based on a OWN Lighting message received
+     *
+     * @param msg the Lighting message received
      */
     private synchronized void updateLightBrightnessState(Lighting msg) {
         final String channel = CHANNEL_BRIGHTNESS;
@@ -360,9 +366,9 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
     }
 
     /**
-     * Returns a WHERE address (string) based on bridge type and unit (optional)
+     * Returns a WHERE address based on bridge type and unit (optional)
      *
-     * @param unit device unit
+     * @param unit the device unit
      **/
     protected String toWhere(String unit) {
         logger.debug("==OWN:LightingHandler== toWhere(unit) ownId={}", ownId);
@@ -376,7 +382,7 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
     /**
      * Returns a WHERE address based on channel
      *
-     * @param channel channel
+     * @param channel the channel
      **/
     protected String toWhere(ChannelUID channel) {
         logger.debug("==OWN:LightingHandler== toWhere(ChannelUID) ownId={}", ownId);

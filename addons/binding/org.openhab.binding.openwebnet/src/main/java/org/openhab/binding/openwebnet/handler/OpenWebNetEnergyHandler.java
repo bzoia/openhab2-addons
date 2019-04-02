@@ -134,6 +134,8 @@ public class OpenWebNetEnergyHandler extends OpenWebNetThingHandler {
 
     /**
      * Updates energy power state based on a EnergyManagement message received from the OWN network
+     *
+     * @param msg the EnergyManagement message received
      */
     private void updateActivePower(EnergyManagement msg) {
         logger.debug("==OWN:EnergyHandler== updateActivePower() for thing: {}", thing.getUID());

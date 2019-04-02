@@ -103,7 +103,9 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
     }
 
     /**
-     * Notifies to inbox a new USB dongle thing has been discovered
+     * Create and notify to Inbox a new USB dongle thing has been discovered
+     *
+     * @param dongleAddr the discovered dongle ADDR
      */
     private void notifyNewDongleThing(int dongleAddr) {
         dongleUID = new ThingUID(OpenWebNetBindingConstants.THING_TYPE_DONGLE, Integer.toString(dongleAddr));

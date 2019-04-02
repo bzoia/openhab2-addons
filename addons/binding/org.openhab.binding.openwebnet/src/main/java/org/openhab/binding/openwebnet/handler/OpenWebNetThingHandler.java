@@ -89,10 +89,6 @@ public abstract class OpenWebNetThingHandler extends BaseThingHandler {
         }
     }
 
-    /**
-     * Handles a command from openHAB to this thing
-     *
-     */
     @Override
     public void handleCommand(ChannelUID channel, Command command) {
         logger.debug("==OWN:ThingHandler== handleCommand() (command={} - channel={})", command, channel);
@@ -141,7 +137,7 @@ public abstract class OpenWebNetThingHandler extends BaseThingHandler {
      * Handle incoming message from OWN network directed to a device. It should be further implemented by each specific
      * device handler.
      *
-     * @param msg BaseOpenMessage to handle
+     * @param msg the message to handle
      */
     protected void handleMessage(BaseOpenMessage msg) {
         ThingStatus ts = getThing().getStatus();
@@ -153,7 +149,7 @@ public abstract class OpenWebNetThingHandler extends BaseThingHandler {
     /**
      * Request to gateway state for thing channel. It must be implemented by each specific device handler.
      *
-     * @param channel ChannleUID to be requested
+     * @param channel the channel to request the state for
      */
     protected abstract void requestChannelState(ChannelUID channel);
 
@@ -169,7 +165,8 @@ public abstract class OpenWebNetThingHandler extends BaseThingHandler {
     /**
      * Returns a prefix String for ownId specific for each handler. To be implemented by sub-classes.
      *
-     **/
+     * @return
+     */
     protected abstract String ownIdPrefix();
 
     protected <U extends Quantity<U>> QuantityType<U> commandToQuantityType(Command command, Unit<U> defaultUnit) {

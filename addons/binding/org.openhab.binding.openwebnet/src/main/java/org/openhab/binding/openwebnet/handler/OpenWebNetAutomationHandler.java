@@ -162,7 +162,7 @@ public class OpenWebNetAutomationHandler extends OpenWebNetThingHandler {
     /**
      * Handles Automation Rollershutter command (UP/DOWN, STOP/MOVE, PERCENT xx%)
      *
-     * @param command
+     * @param command the command to handle
      */
     private void handleShutterCommand(Command command) {
         calibrating = CALIBRATION_INACTIVE; // cancel calibration if we receive a command
@@ -195,7 +195,7 @@ public class OpenWebNetAutomationHandler extends OpenWebNetThingHandler {
     /**
      * Handles Automation Percent command
      *
-     * @param command
+     * @param command the command to handle
      */
     private void handlePercentCommand(PercentType command) {
         int percent = command.intValue();
@@ -274,6 +274,8 @@ public class OpenWebNetAutomationHandler extends OpenWebNetThingHandler {
 
     /**
      * Updates automation device state based on an Automation message received from OWN network
+     *
+     * @param msg the Automation message
      */
     private void updateAutomationState(Automation msg) {
         logger.debug("==OWN:AutomationHandler== updateAutomationState() - msg={} what={}", msg, msg.getWhat());
@@ -360,8 +362,7 @@ public class OpenWebNetAutomationHandler extends OpenWebNetThingHandler {
     }
 
     /**
-     * update positionEst based on movement time and current internalState
-     *
+     * Updates positionEst based on movement time and current internalState
      */
     private void updatePosition() {
         int newPos = POSITION_UNKNOWN;

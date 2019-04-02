@@ -53,7 +53,7 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
         super(SEARCH_TIME);
         bridgeHandler = handler;
         bridgeUID = handler.getThing().getUID();
-        logger.debug("==OWN:DeviceDiscovery== constructor for bridge: {}", bridgeUID);
+        logger.debug("==OWN:DeviceDiscovery== constructor for bridge: '{}'", bridgeUID);
     }
 
     @Override
@@ -64,20 +64,20 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
 
     @Override
     protected void startScan() {
-        logger.info("==OWN:DeviceDiscovery== ------ startScan() - SEARCHING for DEVICES on bridge {} ({})...",
+        logger.info("==OWN:DeviceDiscovery== ------ startScan() - SEARCHING for DEVICES on bridge '{}' ({}) ...",
                 bridgeHandler.getThing().getLabel(), bridgeUID);
         bridgeHandler.searchDevices(this);
     }
 
     @Override
     protected void stopScan() {
-        logger.debug("==OWN:DeviceDiscovery== ------ stopScan()");
+        logger.debug("==OWN:DeviceDiscovery== ------ stopScan() on bridge '{}'", bridgeUID);
         bridgeHandler.scanStopped();
     }
 
     @Override
     public void abortScan() {
-        logger.debug("==OWN:DeviceDiscovery== ------ abortScan()");
+        logger.debug("==OWN:DeviceDiscovery== ------ abortScan() on bridge '{}'", bridgeUID);
         bridgeHandler.scanStopped();
     }
 
@@ -92,7 +92,7 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
     }
 
     /**
-     * Create and notify to Inbox a new DiscoveryResult based on where, OpenDeviceType and BaseOpenMessage (optional)
+     * Create and notify to Inbox a new DiscoveryResult based on where, OpenDeviceType and BaseOpenMessage
      *
      * @param where      the discovered device's address (WHERE)
      * @param deviceType {@link OpenDeviceType} of the discovered device
@@ -102,7 +102,7 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
         logger.info("==OWN:DeviceDiscovery== newDiscoveryResult() WHERE={}, deviceType={}", where, deviceType);
         ThingTypeUID thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_DEVICE; // generic device
         String thingLabel = OpenWebNetBindingConstants.THING_LABEL_DEVICE;
-        Who deviceWho = Who.DEVICE_DIAGNOSTIC; // TODO chnage to another Who (unknown?)
+        Who deviceWho = Who.DEVICE_DIAGNOSTIC; // TODO change to another Who (unknown?)
         if (deviceType != null) {
             switch (deviceType) {
                 case ZIGBEE_ON_OFF_SWITCH: {

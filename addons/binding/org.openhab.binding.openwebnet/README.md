@@ -170,14 +170,14 @@ To add a gateway manually using PaperUI: go to *Inbox > "+" > OpenWebNet > click
 
 Parameters for configuration:
 
-- `host` : IP address / hostname of the BUS/SCS gateway (*mandatory*)
+- `host` : IP address / hostname of the BUS/SCS gateway (String, *mandatory*)
    - Example: `192.168.1.35`
-- `port` : port (*optional*, default: `20000`)
-- `passwd` : gateway password (*required* for gateways that have a password set. Default: `12345`)
+- `port` : port (int, *optional*, default: `20000`)
+- `passwd` : gateway password (String, *required* for gateways that have a password set. Default: `12345`)
    - Example: `abcde` or `12345`
    - if the BUS/SCS gateway is configured to accept connections from the openHAB computer IP address, no password should be required
    - in all other cases, a password must be set. This includes  gateways that have been discovered and added from Inbox that without a password settings will not become ONLINE
-- `discoveryByActivation` : **=EXPERIMENTAL=** discover BUS devices when they are activated also when a device scan is not currently active (*optional*, default: `false`)
+- `discoveryByActivation`: discover BUS devices when they are activated also when a device scan is not currently active (boolean, *optional*, default: `false`)
 
 Alternatively the BUS/SCS Gateway thing can be configured using the `.things` file, see `openwebnet.things` example [below](#full-example).
 
@@ -295,7 +295,7 @@ You will need to add tags manually for items created using PaperUI when Simple M
 ### openwebnet.things:
 
 ```xtend
-Bridge openwebnet:bus_gateway:mybridge "MyHOMEServer1" [ host="192.168.1.35", passwd="abcde" ] {
+Bridge openwebnet:bus_gateway:mybridge "MyHOMEServer1" [ host="192.168.1.35", passwd="abcde", port=20000, discoveryByActivation=false ] {
       bus_on_off_switch        LR_switch        "Living Room Light"       [ where="51" ]
       bus_dimmer               LR_dimmer        "Living Room Dimmer"      [ where="25#4#01" ]
       bus_dimmer               LR_dalidimmer    "Living Room Dali-Dimmer" [ where="0311#4#01" ]
@@ -430,8 +430,9 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
 
 ## Changelog
 
-**v2.5.0.M3 =IN PROGRESS=** - dd/mm/2019
+**v2.5.0.M3 =IN PROGRESS=** - dd/04/2019
 - [FIX #30] manually configured things are now ignored during auto-discovery
+- [FIX #67] param discoveryByActivation changed to boolean
 - [FIX #74] Updated README with energy example
 - [FIX #77] Zigbee bridge: serial port as config parameter
 - checked licence headers & javadocs. Improved logging
