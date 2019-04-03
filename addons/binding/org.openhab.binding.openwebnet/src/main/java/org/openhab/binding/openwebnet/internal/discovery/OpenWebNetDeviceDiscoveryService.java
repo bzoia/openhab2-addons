@@ -212,8 +212,10 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
         }
         Map<String, Object> properties = new HashMap<>(2);
         properties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_WHERE, bridgeHandler.normalizeWhere(where));
+        // properties.put(OpenWebNetBindingConstants.PROPERTY_OWNID,
+        // bridgeHandler.ownIdFromWhoWhere(bridgeHandler.normalizeWhere(where), deviceWho.value().toString()));
         properties.put(OpenWebNetBindingConstants.PROPERTY_OWNID,
-                bridgeHandler.ownIdFromWhoWhere(bridgeHandler.normalizeWhere(where), deviceWho.value().toString()));
+                bridgeHandler.ownIdFromWhoWhere(where, deviceWho.value().toString()));
         if ((deviceType == OpenDeviceType.MULTIFUNCTION_SCENARIO_CONTROL
                 || deviceType == OpenDeviceType.SCENARIO_CONTROL) && baseMsg != null) {
             properties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_SCENARIO_BUTTONS,

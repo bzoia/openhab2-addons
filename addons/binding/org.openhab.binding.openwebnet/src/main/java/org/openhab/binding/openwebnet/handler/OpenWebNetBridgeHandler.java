@@ -123,12 +123,14 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
         }
 
         // debug
-        /*
-         * if (!this.testTransformations()) {
-         * logger.error("==OWN== @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TRANSFORMATION ERORR");
-         * return;
-         * }
-         */
+
+        if (!this.testTransformations()) {
+            logger.error("==OWN== @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TRANSFORMATION ERORR");
+            return;
+        } else {
+            logger.info("==OWN== @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TRANSFORMATION *OK* ");
+        }
+
         // end-debug
 
         gateway.subscribe(this);
@@ -513,9 +515,10 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     }
 
     /**
-     * Return a ownId string (=WHO.WHERE) from a deviceWhere thing config parameter and its handler.
+     * Return a ownId string (=WHO.WHERE) from a deviceWhere thing config parameter (already normalized) and its
+     * handler.
      *
-     * @param deviceWhere
+     * @param deviceWhere the device WHERE config parameter
      * @param handler     the thing handler
      * @return the ownId
      */
@@ -526,7 +529,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     /**
      * Returns a ownId string (=WHO.WHERE) from a WHERE address and WHO
      *
-     * @param where the WHERE address
+     * @param where the WHERE address (to be normalized)
      * @param who   the WHO
      * @return the ownId
      */
@@ -584,7 +587,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
      *      - private   ownIdFromMessage()      onMessage()
      *      - public    thingIdFromWhere()      OpenWebNetDeviceDiscoveryService                --> normalizeWhere().replace(#)
      */
-    /*
+
     public enum TEST {
         zigbee("789309801#9","1","7893098","1.7893098","7893098"),
         sw("51","1","51","1.51","51"),
@@ -622,11 +625,10 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
     }
 
  // @formatter:on
-    */
 
     /**
      * Normalize a WHERE address for Thermo and Zigbee devices
-     * 
+     *
      * @param where the WHERE address
      * @return the normalized WHERE
      */
