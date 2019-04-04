@@ -50,7 +50,7 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
 
     // TODO support multiple dongles at the same time
     private OpenGatewayZigBee zbgateway;
-    private int dongleAddr = 0;
+    private int dongleZigBeeId = 0;
     private ThingUID dongleUID = null;
 
     public OpenWebNetBridgeDiscoveryService() {
@@ -85,10 +85,10 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
             zbgateway.connect();
         } else { // dongle is already connected
             logger.debug("==OWN:BridgeDiscovery:Dongle== ... dongle is already connected ...");
-            if (dongleAddr != 0) {
+            if (dongleZigBeeId != 0) {
                 // a dongle was already discovered, notify new dongle thing to inbox
-                logger.debug("==OWN:BridgeDiscovery:Dongle== ... dongle ADDR is: {}", dongleAddr);
-                notifyNewDongleThing(dongleAddr);
+                logger.debug("==OWN:BridgeDiscovery:Dongle== ... dongle ZigBeeId is: {}", dongleZigBeeId);
+                notifyNewDongleThing(dongleZigBeeId);
             } else {
                 logger.debug("==OWN:BridgeDiscovery:Dongle== ... requesting again MACAddress ...");
                 zbgateway.send(GatewayManagement.requestMACAddress());
@@ -105,18 +105,19 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
     /**
      * Create and notify to Inbox a new USB dongle thing has been discovered
      *
-     * @param dongleAddr the discovered dongle ADDR
+     * @param dongleZigBeeId the discovered dongle ZigBeeId
      */
-    private void notifyNewDongleThing(int dongleAddr) {
-        dongleUID = new ThingUID(OpenWebNetBindingConstants.THING_TYPE_DONGLE, Integer.toString(dongleAddr));
+    private void notifyNewDongleThing(int dongleZigBeeId) {
+        dongleUID = new ThingUID(OpenWebNetBindingConstants.THING_TYPE_DONGLE, Integer.toString(dongleZigBeeId));
         Map<String, Object> dongleProperties = new HashMap<>(2);
         dongleProperties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_SERIAL_PORT, zbgateway.getConnectedPort());
         dongleProperties.put(OpenWebNetBindingConstants.PROPERTY_FIRMWARE_VERSION, zbgateway.getFirmwareVersion());
+        dongleProperties.put(OpenWebNetBindingConstants.PROPERTY_ZIGBEEID, dongleZigBeeId);
 
         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(dongleUID).withProperties(dongleProperties)
-                .withLabel(OpenWebNetBindingConstants.THING_LABEL_DONGLE + " (ID=" + dongleAddr + ", "
+                .withLabel(OpenWebNetBindingConstants.THING_LABEL_DONGLE + " (ID=" + dongleZigBeeId + ", "
                         + zbgateway.getConnectedPort() + ", v=" + zbgateway.getFirmwareVersion() + ")")
-                .build();
+                .withRepresentationProperty(OpenWebNetBindingConstants.PROPERTY_ZIGBEEID).build();
         logger.info("==OWN:BridgeDiscovery== --- DONGLE thing discovered: {}", discoveryResult.getLabel());
         thingDiscovered(discoveryResult);
     }
@@ -125,7 +126,7 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
     public void onConnected() {
         logger.info("==OWN:BridgeDiscovery:Dongle== onConnected() FOUND DONGLE: CONNECTED port={}",
                 zbgateway.getConnectedPort());
-        dongleAddr = 0; // reset dongleAddr
+        dongleZigBeeId = 0; // reset dongleZigBeeId
         zbgateway.send(GatewayManagement.requestFirmwareVersion());
         zbgateway.send(GatewayManagement.requestMACAddress());
     }
@@ -162,17 +163,17 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
     public void onMessage(OpenMessage msg) {
         // TODO change this to listen to response to MACddress request session with timeout
         // and not to all messages that arrive here
-        if (dongleAddr == 0) { // we do not know the discovered dongle addr yet, check if it was discovered with this
-                               // message
-            int addr = zbgateway.getDongleAddrAsDecimal();
-            if (addr != 0) {
+        if (dongleZigBeeId == 0) { // we do not know the discovered ZigBeeID yet, check if it was discovered with this
+            // message
+            int zbid = zbgateway.getDongleZigBeeIdAsDecimal();
+            if (zbid != 0) {
                 // a dongle was discovered, notify new dongle thing to inbox
-                dongleAddr = addr;
-                logger.debug("==OWN:BridgeDiscovery== DONGLE ADDR is set: {}", dongleAddr);
-                notifyNewDongleThing(dongleAddr);
+                dongleZigBeeId = zbid;
+                logger.debug("==OWN:BridgeDiscovery== DONGLE ZigBeeID is set: {}", dongleZigBeeId);
+                notifyNewDongleThing(dongleZigBeeId);
             }
         } else {
-            logger.trace("==OWN:BridgeDiscovery== onReceiveFrame() dongleAddr != 0 : ignoring (msg={})", msg);
+            logger.trace("==OWN:BridgeDiscovery== onReceiveFrame() ZigBeeID != 0 : ignoring (msg={})", msg);
         }
 
     }

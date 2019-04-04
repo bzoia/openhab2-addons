@@ -15,13 +15,13 @@
 			<property name="firmwareVersion">Unknown</property>
 		</properties>
 
-        <representation-property>ownId</representation-property>
+        <representation-property>zigbeeid</representation-property>
 			
 		<config-description>          
 			<parameter name="serialPort" type="text">
 				<label>Serial Port</label>
 				<context>serial-port</context>
-				<description>Serial port where OpenWebNet Zigbee USB dongle is connected. Example: COM3 (Win), /dev/ttyUSB0 (Linux), etc.</description>
+				<description>Serial port where the OpenWebNet Zigbee USB dongle is connected. Example: COM3 (Win), /dev/ttyUSB0 (Linux), etc.</description>
 				<required>true</required>
 			</parameter>
 		</config-description>
