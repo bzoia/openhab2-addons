@@ -139,10 +139,10 @@ For other gateways you can add them manually, see [Thing Configuration](#thing-c
 - Once the gateway is online, a second Scan request from Inbox will discover BUS devices
 - BUS/SCS Dimmers must be ON and dimmed (30%-100%) during a Scan, otherwise they will be discovered as simple On/Off switches
     - *KNOWN ISSUE*: In some cases dimmers connected to a F429 Dali-interface are not automatically discovered
-- CEN/CEN+ Scenario Control devices will be discovered by activation only. See [discovery by activation](#discovery-by-activation) for details.
-After confirming a discovered CEN/CEN+ device from Inbox, activate again its scenario buttons and refresh the PaperUI Control page to see button channels appear.
+- CEN/CEN+ Scenario Control devices will be discovered by activation only. See [discovery by activation](#discovery-by-activation) for details. After confirming a discovered CEN/CEN+ device from Inbox, activate again its scenario buttons and refresh the PaperUI Control page to see button channels appear.
 
 #### Discovery by Activation
+
 Devices can also be discovered if activated while a Inbox Scan is active: start a new Scan, wait 15-20 seconds and then _while the Scan is still active_ (spinning arrow in Inbox), activate the physical device (for example dim the dimmer, push a CEN/CEN+ Scenario button, etc.) to have it discovered by the binding.
 
 If a device cannot be discovered automatically it's always possible to add them manually, see [Configuring Devices](#configuring-devices).
@@ -244,6 +244,7 @@ It's possible to enter a value manually or set `shutterRun=AUTO` (default) to ca
 
 `heating` and `cooling` channels assume that your BTicino heating/cooling actuators are configured as #1 and #2 respectively.
 To ensure the heating/cooling actuators are set up correctly for a Thermostat:
+
 1. open *MyHome_Suite*
 2. go to Thermostat configuration panel > *Plant settings* 
 3. in *Actuators section* check if the first actuator listed is numbered "1". This will be the actuator which state will be returned by the binding in the `heating` channel.
@@ -410,29 +411,32 @@ end
 ### FAQs
 
 #### I want to control blinds from Google Home (Google Assistant): how?
+
 Blinds are not currently supported by the Google Home add-on for openHAB, this is not a limitation of this binding. 
 See: https://github.com/openhab/openhab-google-assistant/issues/59
 
 #### My BTicino devices are visible from PaperUI but cannot be discovered by Google Home / Alexa
+
 Not all device types are supported by Google Home / Alexa and the respective openHAB add-ons. This is not a limitation of the binding.
 Visit the links at the end of section [Integration with Assistants](#integration-with-assistants) to check compatibility with your assistant.
 
 #### When message/feature XXXX will be supported ?
+
 You can check if someone has already requested support for a message/feature here: [GitHub repo](https://github.com/mvalla/openhab2-addons/issues).
 If not, add a new issue. Issues are organised by milestones, but deadlines -of course- are not guaranteed (other volunteer developers are welcome!).
 
 ### Known Issues
+
 For a full list of current open issues / features requests see [GitHub repo](https://github.com/mvalla/openhab2-addons/issues)
 
-- With some latest firmware versions of MyHOMEServer_1, rollershutters are not discovered because this gateways responds to device status request with a invalid OpenWebNet message. This is a BUG by BTicino and not a problem of the binding.
-See: https://github.com/mvalla/openhab2-addons/issues/34
+- With some latest firmware versions of MyHOMEServer_1, rollershutters are not discovered because this gateways responds to device status request with a invalid OpenWebNet message. This is a BUG by BTicino and not a problem of the binding. See: https://github.com/mvalla/openhab2-addons/issues/34
 
-- In some cases dimmers connected to a F429 Dali-interface cannot be discovered, even if switched ON and dimmed. This looks like as a limitation of some gateways that do not report status of Dali devices when requested.
-See: https://github.com/mvalla/openhab2-addons/issues/14
+- In some cases dimmers connected to a F429 Dali-interface cannot be discovered, even if switched ON and dimmed. This looks like as a limitation of some gateways that do not report status of Dali devices when requested. See: https://github.com/mvalla/openhab2-addons/issues/14
 
 ## Changelog
 
 **v2.5.0.M3 =IN PROGRESS=** - dd/04/2019
+
 - [FIX #30] manually configured things are now ignored during auto-discovery
 - [FIX #67] *[BREAKING CHANGE]* param discoveryByActivation changed to boolean ("false" -> false)
 - [FIX #74] Updated README with energy example
@@ -448,11 +452,13 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
     - debug messages for ZB connect/connectGateway
 
 **v2.5.0.M2-1** - 20/03/2019
+
 - [FIX #66] USB dongle (gateway) cannot connect anymore
 - [FIX #65] Rollershutter % Position does not work in 2.5.0.M2
 - removed Switchable tag to shutter channel
 
 **v2.5.0.M2** - 08/03/2019
+
 - [FIX #29] Fixed (again) Automation command translation (1000#)
 - [FIX] Fixed Energy Meter subscription (every 10min)
 - [FIX] corrected deviceWhere address management for ZigBee devices and discovery of ON_OFF_SWITCH_2UNITS

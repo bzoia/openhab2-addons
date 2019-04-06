@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <thing:thing-descriptions bindingId="openwebnet"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
-
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+	
 	<!-- OpenWebNet BUS gateway -->
 	<bridge-type id="bus_gateway">
 		<label>BUS Gateway</label>
@@ -14,8 +14,8 @@
 			<property name="model">Unknown</property> 
 			<property name="firmwareVersion">Unknown</property>
 		</properties>
-
-        <representation-property>serialNumber</representation-property>
+		
+		<representation-property>serialNumber</representation-property>
 				
 		<config-description>
 
@@ -39,13 +39,13 @@
 				<required>false</required>
 			</parameter>
 
-            <parameter name="discoveryByActivation" type="boolean">
-                <label>Discovery By Activation</label>
-                <description>Discover BUS devices when they are activated (also when a device scan is not active) (default: false)</description>
-                <required>false</required>
-                <default>false</default>
-            </parameter>
-            
+			<parameter name="discoveryByActivation" type="boolean">
+				<label>Discovery By Activation</label>
+				<description>Discover BUS devices when they are activated (also when a device scan is not active) (default: false)</description>
+				<required>false</required>
+				<default>false</default>
+			</parameter>
+			
 		</config-description>
 
 	</bridge-type>

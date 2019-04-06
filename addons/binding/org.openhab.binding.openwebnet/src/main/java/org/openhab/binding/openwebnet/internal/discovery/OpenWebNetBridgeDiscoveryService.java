@@ -115,8 +115,8 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
         gwProperties.put(OpenWebNetBindingConstants.PROPERTY_ZIGBEEID, String.valueOf(gatewayZigBeeId));
 
         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(gatewayUID).withProperties(gwProperties)
-                .withLabel(OpenWebNetBindingConstants.THING_LABEL_ZB_GATEWAY + " (ID=" + gatewayZigBeeId + ", "
-                        + zbgateway.getConnectedPort() + ", v" + zbgateway.getFirmwareVersion() + ")")
+                .withLabel(OpenWebNetBindingConstants.THING_LABEL_ZB_GATEWAY + " (" + zbgateway.getConnectedPort()
+                        + ", v" + zbgateway.getFirmwareVersion() + ")")
                 .withRepresentationProperty(OpenWebNetBindingConstants.PROPERTY_ZIGBEEID).build();
         logger.info("==OWN:BridgeDiscovery== --- ZIGBEE USB GATEWAY thing discovered: {}", discoveryResult.getLabel());
         thingDiscovered(discoveryResult);

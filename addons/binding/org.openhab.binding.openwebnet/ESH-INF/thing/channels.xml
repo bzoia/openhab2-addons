@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <thing:thing-descriptions bindingId="openwebnet"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
-
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+	
 	<!-- Switch Channel -->
 	<channel-type id="switch">
 		<item-type>Switch</item-type>
@@ -112,7 +112,7 @@
 		<state readOnly="true" />
 	</channel-type>
 	
-	 <channel-type id="activeMode">
+	<channel-type id="activeMode">
 		<item-type>String</item-type>
 		<label>Operation Mode</label>
 		<description>Current operation mode (active mode) of the thermostat (read only)</description>
@@ -146,7 +146,7 @@
 	</channel-type>
 	
 	<channel-type id="setpointTemperature">
-    	<item-type>Number:Temperature</item-type>
+		<item-type>Number:Temperature</item-type>
 		<label>Setpoint Temperature</label>
 		<description>Setpoint temperature (read/write)</description>
 		<category>Temperature</category>
@@ -169,45 +169,45 @@
 			</options>
 		</state>
 	</channel-type>
-	    
-    <!-- Energy channels -->
-    <channel-type id="power">
-        <item-type>Number</item-type>
-        <label>Power</label>
-        <description>Actual active power usage</description>
-        <category>Energy</category>
-        <state readOnly="true" pattern="%.1f W"></state>
-    </channel-type>
-    
-    <!-- Scenarios channels -->
-    <channel-type id="scenarioButton">
-        <item-type>String</item-type>
-        <label>Scenario Button</label>
-        <description>Scenario button for CEN/CEN+ scenarios</description>
-        <state>
-            <options>
-                <option value="PRESSED">pressed</option>
-                <option value="RELEASED">released</option>
-                <option value="PRESSED_EXT">pressed_ext</option>
-                <option value="RELEASED_EXT">released_ext</option>
-            </options>
-        </state>
-    </channel-type>
-    
-    <channel-type id="dryContactIR">
-        <item-type>Switch</item-type>
-        <label>Sensor</label>
-        <description>Indicates if a Dry Contact interface is ON or a IR Sensor has detected movement</description>
-        <category></category>
-        
-        <state readOnly="true">
-        <!--    <options>
-                <option value="ON">ON - IR Detection</option>
-                <option value="OFF">OFF - IR No Detection</option>
-            </options>
-        -->
-        </state>
-        
-    </channel-type>
-    
+		
+	<!-- Energy channels -->
+	<channel-type id="power">
+		<item-type>Number</item-type>
+		<label>Power</label>
+		<description>Actual active power usage</description>
+		<category>Energy</category>
+		<state readOnly="true" pattern="%.1f W"></state>
+	</channel-type>
+	
+	<!-- Scenarios channels -->
+	<channel-type id="scenarioButton">
+		<item-type>String</item-type>
+		<label>Scenario Button</label>
+		<description>Scenario button for CEN/CEN+ scenarios</description>
+		<state>
+			<options>
+				<option value="PRESSED">pressed</option>
+				<option value="RELEASED">released</option>
+				<option value="PRESSED_EXT">pressed_ext</option>
+				<option value="RELEASED_EXT">released_ext</option>
+			</options>
+		</state>
+	</channel-type>
+	
+	<channel-type id="dryContactIR">
+		<item-type>Switch</item-type>
+		<label>Sensor</label>
+		<description>Indicates if a Dry Contact interface is ON or a IR Sensor has detected movement</description>
+		<category></category>
+		
+		<state readOnly="true">
+		<!--	<options>
+				<option value="ON">ON - IR Detection</option>
+				<option value="OFF">OFF - IR No Detection</option>
+			</options>
+		-->
+		</state>
+		
+	</channel-type>
+	
 </thing:thing-descriptions>

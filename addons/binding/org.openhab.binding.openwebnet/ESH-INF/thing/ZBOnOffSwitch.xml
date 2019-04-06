@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <thing:thing-descriptions bindingId="openwebnet"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
-
-
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+	
 	<!-- Thing for OnOff Switch (BTicino 4591/3584/...) -->
 	<thing-type id="zb_on_off_switch">
 		<supported-bridge-type-refs>
@@ -23,9 +22,9 @@
 			<property name="model">BTI-4591/3684/etc.</property> 
 			<property name="ownDeviceType">256</property>
 		</properties>
-
-        <representation-property>ownId</representation-property>
-	
+		
+		<representation-property>ownId</representation-property>
+		
 		<config-description>
 			<parameter name="where" type="text">
 				<label>OpenWebNet Device Address</label>

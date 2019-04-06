@@ -143,8 +143,11 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
 
     @Override
     public @Nullable DiscoveryResult createResult(RemoteDevice device) {
-        logger.info("==OWN:UPnP== Found device: {}", device.getType());
+        logger.info("==OWN:UPnP== --- Found device # {}", device.getType());
         DeviceInfo devInfo = new DeviceInfo(device);
+        if (!devInfo.manufacturer.matches("<unknown>")) {
+            logger.info("==OWN:UPnP==                  |- {} ({})", devInfo.modelName, devInfo.manufacturer);
+        }
         ThingUID thingId = generateThingUID(devInfo);
         if (thingId != null) {
             if (devInfo.host != null) {
@@ -184,7 +187,7 @@ public class BusGatewayUpnpDiscovery implements UpnpDiscoveryParticipant {
 
     /**
      * Returns a ThingUID from already extracted DeviceInfo
-     * 
+     *
      * @param devInfo the device info
      * @return a new ThingUID
      */
