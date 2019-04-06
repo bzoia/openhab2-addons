@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="discovery.amazondashbutton" immediate="true" name="org.openhab.binding.amazondashbutton.internal.discovery.AmazonDashButtonDiscoveryService">
+   <service>
+      <provide interface="org.eclipse.smarthome.config.discovery.DiscoveryService"/>
+   </service>
+   <implementation class="org.openhab.binding.amazondashbutton.internal.discovery.AmazonDashButtonDiscoveryService"/>
+</scr:component>

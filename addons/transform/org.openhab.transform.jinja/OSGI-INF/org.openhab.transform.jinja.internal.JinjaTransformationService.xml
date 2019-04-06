@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.openhab.transform.jinja.internal.JinjaTransformationService">
+   <property name="smarthome.transform" value="JINJA"/>
+   <service>
+      <provide interface="org.eclipse.smarthome.core.transform.TransformationService"/>
+   </service>
+   <implementation class="org.openhab.transform.jinja.internal.JinjaTransformationService"/>
+</scr:component>

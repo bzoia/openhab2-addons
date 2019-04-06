@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.spotify" immediate="true" name="org.openhab.binding.spotify.internal.SpotifyHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setAuthService" interface="org.openhab.binding.spotify.internal.SpotifyAuthService" name="AuthService" unbind="unsetAuthService"/>
+   <reference bind="setDynamicStateDescriptionProvider" interface="org.openhab.binding.spotify.internal.handler.SpotifyDynamicStateDescriptionProvider" name="DynamicStateDescriptionProvider" unbind="unsetDynamicStateDescriptionProvider"/>
+   <reference bind="setHttpClientFactory" interface="org.eclipse.smarthome.io.net.http.HttpClientFactory" name="HttpClientFactory" unbind="unsetHttpClientFactory"/>
+   <reference bind="setOAuthFactory" interface="org.eclipse.smarthome.core.auth.client.oauth2.OAuthFactory" name="OAuthFactory" unbind="unsetOAuthFactory"/>
+   <implementation class="org.openhab.binding.spotify.internal.SpotifyHandlerFactory"/>
+</scr:component>

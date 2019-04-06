@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" configuration-pid="discovery.plugwise" deactivate="deactivate" immediate="true" modified="modified" name="org.openhab.binding.plugwise.internal.PlugwiseStickDiscoveryService">
+   <service>
+      <provide interface="org.eclipse.smarthome.config.discovery.DiscoveryService"/>
+   </service>
+   <reference bind="setSerialPortManager" interface="org.eclipse.smarthome.io.transport.serial.SerialPortManager" name="SerialPortManager" unbind="unsetSerialPortManager"/>
+   <implementation class="org.openhab.binding.plugwise.internal.PlugwiseStickDiscoveryService"/>
+</scr:component>

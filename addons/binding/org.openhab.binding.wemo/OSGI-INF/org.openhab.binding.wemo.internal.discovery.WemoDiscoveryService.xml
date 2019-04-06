@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="discovery.wemo" immediate="true" name="org.openhab.binding.wemo.internal.discovery.WemoDiscoveryService">
+   <service>
+      <provide interface="org.eclipse.smarthome.config.discovery.DiscoveryService"/>
+   </service>
+   <reference bind="setUpnpService" interface="org.jupnp.UpnpService" name="UpnpService" unbind="unsetUpnpService"/>
+   <implementation class="org.openhab.binding.wemo.internal.discovery.WemoDiscoveryService"/>
+</scr:component>

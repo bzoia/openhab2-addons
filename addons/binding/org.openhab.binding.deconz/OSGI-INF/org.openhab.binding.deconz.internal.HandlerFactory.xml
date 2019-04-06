@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.deconz" name="org.openhab.binding.deconz.internal.HandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setHttpClientFactory" interface="org.eclipse.smarthome.io.net.http.HttpClientFactory" name="HttpClientFactory" unbind="unsetHttpClientFactory"/>
+   <reference bind="setWebSocketFactory" interface="org.eclipse.smarthome.io.net.http.WebSocketFactory" name="WebSocketFactory" unbind="unsetWebSocketFactory"/>
+   <implementation class="org.openhab.binding.deconz.internal.HandlerFactory"/>
+</scr:component>

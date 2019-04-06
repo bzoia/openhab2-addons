@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.bosesoundtouch" immediate="true" name="org.openhab.binding.bosesoundtouch.internal.BoseSoundTouchHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setPresetChannelTypeProvider" interface="org.openhab.binding.bosesoundtouch.internal.BoseStateDescriptionOptionProvider" name="PresetChannelTypeProvider" unbind="unsetPresetChannelTypeProvider"/>
+   <reference bind="setStorageService" interface="org.eclipse.smarthome.core.storage.StorageService" name="StorageService" unbind="unsetStorageService"/>
+   <implementation class="org.openhab.binding.bosesoundtouch.internal.BoseSoundTouchHandlerFactory"/>
+</scr:component>

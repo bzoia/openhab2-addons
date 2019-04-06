@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="discovery.silvercrestwifisocket" immediate="true" name="org.openhab.binding.silvercrestwifisocket.internal.discovery.SilvercrestWifiSocketDiscoveryService">
+   <service>
+      <provide interface="org.eclipse.smarthome.config.discovery.DiscoveryService"/>
+   </service>
+   <reference bind="setMediator" interface="org.openhab.binding.silvercrestwifisocket.internal.handler.SilvercrestWifiSocketMediator" name="Mediator" unbind="unsetMediator"/>
+   <implementation class="org.openhab.binding.silvercrestwifisocket.internal.discovery.SilvercrestWifiSocketDiscoveryService"/>
+</scr:component>

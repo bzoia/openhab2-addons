@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" configuration-pid="org.eclipse.smarthome.marketplace" deactivate="deactivate" immediate="true" modified="modified" name="org.openhab.extensionservice.marketplace.internal.MarketplaceExtensionService">
+   <property name="service.pid" value="org.eclipse.smarthome.marketplace"/>
+   <property name="service.config.category" value="system"/>
+   <property name="service.config.description.uri" value="system:marketplace"/>
+   <property name="service.config.label" value="Marketplace"/>
+   <service>
+      <provide interface="org.eclipse.smarthome.core.extension.ExtensionService"/>
+   </service>
+   <reference bind="setEventPublisher" interface="org.eclipse.smarthome.core.events.EventPublisher" name="EventPublisher" unbind="unsetEventPublisher"/>
+   <reference bind="addExtensionHandler" cardinality="1..n" interface="org.openhab.extensionservice.marketplace.MarketplaceExtensionHandler" name="ExtensionHandler" policy="dynamic" unbind="removeExtensionHandler"/>
+   <implementation class="org.openhab.extensionservice.marketplace.internal.MarketplaceExtensionService"/>
+</scr:component>

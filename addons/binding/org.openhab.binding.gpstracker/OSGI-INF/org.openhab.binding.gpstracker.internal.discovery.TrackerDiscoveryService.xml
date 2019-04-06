@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" configuration-pid="discovery.gpstracker" deactivate="deactivate" immediate="true" modified="modified" name="org.openhab.binding.gpstracker.internal.discovery.TrackerDiscoveryService">
+   <service>
+      <provide interface="org.eclipse.smarthome.config.discovery.DiscoveryService"/>
+      <provide interface="org.openhab.binding.gpstracker.internal.discovery.TrackerDiscoveryService"/>
+   </service>
+   <implementation class="org.openhab.binding.gpstracker.internal.discovery.TrackerDiscoveryService"/>
+</scr:component>

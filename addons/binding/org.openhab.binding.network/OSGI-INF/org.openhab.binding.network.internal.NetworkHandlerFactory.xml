@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" configuration-pid="binding.network" deactivate="deactivate" modified="modified" name="org.openhab.binding.network.internal.NetworkHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <implementation class="org.openhab.binding.network.internal.NetworkHandlerFactory"/>
+</scr:component>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.valloxmv" name="org.openhab.binding.valloxmv.internal.ValloxMVHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setHttpClientFactory" interface="org.eclipse.smarthome.io.net.http.WebSocketFactory" name="HttpClientFactory" unbind="unsetHttpClientFactory"/>
+   <implementation class="org.openhab.binding.valloxmv.internal.ValloxMVHandlerFactory"/>
+</scr:component>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.cm11a" name="org.openhab.binding.cm11a.internal.Cm11aHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <implementation class="org.openhab.binding.cm11a.internal.Cm11aHandlerFactory"/>
+</scr:component>

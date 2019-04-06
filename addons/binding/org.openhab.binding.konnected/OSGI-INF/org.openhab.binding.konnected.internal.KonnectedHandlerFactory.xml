@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.konnected" name="org.openhab.binding.konnected.internal.KonnectedHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setHttpService" interface="org.osgi.service.http.HttpService" name="HttpService" unbind="unsetHttpService"/>
+   <reference bind="setNetworkAddressService" interface="org.eclipse.smarthome.core.net.NetworkAddressService" name="NetworkAddressService" unbind="unsetNetworkAddressService"/>
+   <implementation class="org.openhab.binding.konnected.internal.KonnectedHandlerFactory"/>
+</scr:component>

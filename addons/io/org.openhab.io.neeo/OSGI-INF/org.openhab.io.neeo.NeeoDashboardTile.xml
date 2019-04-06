@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.openhab.io.neeo.NeeoDashboardTile">
+   <service>
+      <provide interface="org.openhab.ui.dashboard.DashboardTile"/>
+   </service>
+   <implementation class="org.openhab.io.neeo.NeeoDashboardTile"/>
+</scr:component>

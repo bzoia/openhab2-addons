@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.weatherunderground" name="org.openhab.binding.weatherunderground.internal.WeatherUndergroundHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setLocaleProvider" interface="org.eclipse.smarthome.core.i18n.LocaleProvider" name="LocaleProvider" unbind="unsetLocaleProvider"/>
+   <reference bind="setLocationProvider" interface="org.eclipse.smarthome.core.i18n.LocationProvider" name="LocationProvider" unbind="unsetLocationProvider"/>
+   <reference bind="setUnitProvider" interface="org.eclipse.smarthome.core.i18n.UnitProvider" name="UnitProvider" unbind="unsetUnitProvider"/>
+   <implementation class="org.openhab.binding.weatherunderground.internal.WeatherUndergroundHandlerFactory"/>
+</scr:component>

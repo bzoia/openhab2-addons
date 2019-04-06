@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.openhab.io.webaudio.internal.WebAudioAudioSink">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.audio.AudioSink"/>
+   </service>
+   <reference bind="setAudioHTTPServer" interface="org.eclipse.smarthome.core.audio.AudioHTTPServer" name="AudioHTTPServer" unbind="unsetAudioHTTPServer"/>
+   <reference bind="setEventPublisher" interface="org.eclipse.smarthome.core.events.EventPublisher" name="EventPublisher" unbind="unsetEventPublisher"/>
+   <implementation class="org.openhab.io.webaudio.internal.WebAudioAudioSink"/>
+</scr:component>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" configuration-pid="org.openhab.imperihome" deactivate="deactivate" immediate="true" modified="modified" name="org.openhab.io.imperihome.internal.ImperiHomeApiServlet">
+   <property name="service.pid" value="org.openhab.imperihome"/>
+   <property name="service.config.description.uri" value="io:imperihome"/>
+   <property name="service.config.category" value="io"/>
+   <property name="service.config.label" value="ImperiHome Integration"/>
+   <service>
+      <provide interface="javax.servlet.http.HttpServlet"/>
+   </service>
+   <reference bind="setEventPublisher" interface="org.eclipse.smarthome.core.events.EventPublisher" name="EventPublisher" unbind="unsetEventPublisher"/>
+   <reference bind="setHttpService" interface="org.osgi.service.http.HttpService" name="HttpService" unbind="unsetHttpService"/>
+   <reference bind="setItemRegistry" interface="org.eclipse.smarthome.core.items.ItemRegistry" name="ItemRegistry" policy="dynamic" unbind="unsetItemRegistry"/>
+   <reference bind="setPersistenceServiceRegistry" interface="org.eclipse.smarthome.core.persistence.PersistenceServiceRegistry" name="PersistenceServiceRegistry" unbind="unsetPersistenceServiceRegistry"/>
+   <implementation class="org.openhab.io.imperihome.internal.ImperiHomeApiServlet"/>
+</scr:component>
