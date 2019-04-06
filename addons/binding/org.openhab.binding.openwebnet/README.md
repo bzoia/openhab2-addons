@@ -2,7 +2,7 @@
 
 This new binding integrates BTicino / Legrand MyHOME(r) BUS & ZigBee wireless (MyHOME_Play) devices using the **[OpenWebNet](https://en.wikipedia.org/wiki/OpenWebNet) protocol**.
 It is the first known binding for openHAB 2 that **supports *both* wired BUS/SCS** as well as **wireless setups**, all in the same biding. The two networks can be configured simultaneously.
-It's also the first OpenWebNet binding with support for discovery of BUS/SCS gateways and devices.
+It's also the first OpenWebNet binding with support for discovery of BUS/SCS IP gateways and devices.
 Commands from openHAB and feedback (events) from BUS/SCS and wireless network are supported.
 Support for both numeric (`12345`) and alpha-numeric (`abcde` - HMAC authentication) gateway passwords is included.
 
@@ -20,7 +20,7 @@ These gateways have been tested with the binding:
 [MH200N](http://www.homesystems-legrandgroup.com/BtHomeSystems/productDetail.action?productId=016), 
 [F453](http://www.homesystems-legrandgroup.com/BtHomeSystems/productDetail.action?productId=027),  etc.
 
-- **Wireless (ZigBee) USB gateways**, such as [BTicino 3578](http://www.catalogo.bticino.it/BTI-3578-EN) and [Legrand 088328](https://www.legrand.fr/pro/catalogue/35115-interface-openradio/interface-open-webnet-et-radio-pour-pilotage-dune-installation-myhome-play)
+- **Wireless ZigBee USB Gateways**, such as [BTicino 3578](https://catalogo.bticino.it/BTI-3578-IT) and [Legrand 088328](https://www.legrand.com/ecatalogue/088328-openweb-net-zigbee-gateway-radio-interface.html)
 
 ## Supported Things
 
@@ -41,9 +41,9 @@ The following Things and OpenWebNet `WHOs` are supported:
 
 | Category   | WHO   | Thing Type IDs                               |    Discovery?  | Feedback from Radio? | Description                                                 | Status                               |
 | ---------- | :---: | :------------------------------------------: | :----------------: | :--------: | ----------------------------------------------------------- | ------------------------------------ |
-| Gateway    | `13`  | `dongle`                                     |     Yes            | n/a         | Wireless (ZigBee) USB Dongle (BTicino/Legrand models: BTI-3578/088328) | Tested: BTI-3578 and LG 088328             |
-| Lightning| `1`   | `dimmer`, `on_off_switch`, `on_off_switch2u` | Yes                | Yes        | ZigBee dimmers, switches and 2-unit switches                | Tested: BTI-4591, BTI-3584, BTI-4585 |
-| Automation | `2`   | `automation`                           | Yes | Yes          | ZigBee roller shutters, with position feedback and auto-calibration via a *UP >> DOWN >> Position%* cycle                                                           | *To be tested*    |
+| Gateway    | `13`  | `zb_gateway`                                     |     Yes            | n/a         | Wireless ZigBee USB Gateway (BTicino/Legrand models: BTI-3578/088328) | Tested: BTI-3578 and LG 088328             |
+| Lightning| `1`   | `zb_dimmer`, `zb_on_off_switch`, `zb_on_off_switch2u` | Yes                | Yes        | ZigBee dimmers, switches and 2-unit switches                | Tested: BTI-4591, BTI-3584, BTI-4585 |
+| Automation | `2`   | `zb_automation`                           | Yes | Yes          | ZigBee roller shutters        | *To be tested*    |
 
 ## Requirements
 
@@ -143,13 +143,13 @@ For other gateways you can add them manually, see [Thing Configuration](#thing-c
 After confirming a discovered CEN/CEN+ device from Inbox, activate again its scenario buttons and refresh the PaperUI Control page to see button channels appear.
 
 #### Discovery by Activation
-Devices can also be discovered if activated while a Inbox Scan is active: start a new Scan, wait 15-20 seconds and then while the _Scan is still active_ (spinning arrow in Inbox), activate the physical device (for example dim the dimmer, push a CEN/CEN+ Scenario button, etc.) to have it discovered by the binding.
+Devices can also be discovered if activated while a Inbox Scan is active: start a new Scan, wait 15-20 seconds and then _while the Scan is still active_ (spinning arrow in Inbox), activate the physical device (for example dim the dimmer, push a CEN/CEN+ Scenario button, etc.) to have it discovered by the binding.
 
 If a device cannot be discovered automatically it's always possible to add them manually, see [Configuring Devices](#configuring-devices).
 
 ### Wireless (ZigBee) Discovery
 
-- The USB dongle must be inserted in one of the USB ports of the openHAB computer before discovery is started
+- The ZigBee USB Gateway must be inserted in one of the USB ports of the openHAB computer before discovery is started
 - ***IMPORTANT NOTE:*** As for the OH serial binding, on Linux the `openhab` user must be member of the `dialout` group, to be able to use USB/serial port:
 
     ```
@@ -158,8 +158,8 @@ If a device cannot be discovered automatically it's always possible to add them 
 
     + The user will need to logout and login to see the new group added. If you added your user to this group and still cannot get permission, reboot Linux to ensure the new group permission is attached to the `openhab` user.
 - Once the gateway is discovered and added, a second discovery request from Inbox will discover devices. Because of the ZigBee radio network, discovery will take ~40-60 sec. Be patient!
-- Wireless devices must be part of the same ZigBee network of the USB dongle to discover them. Please refer to [this guide by BTicino](http://www.bticino.com/products-catalogue/management-of-connected-lights-and-shutters/#installation) to setup a ZigBee wirelss network which includes the USB dongle
-- Only powered wireless devices part of the same ZigBee network and within radio coverage of the USB dongle will be discovered. Unreachable or not powered devices will be discovered as *GENERIC* devices and cannot be controlled. Control units cannot be discovered by the USB dongle and therefore are not supported
+- Wireless devices must be part of the same ZigBee network of the ZigBee USB Gateway to discover them. Please refer to [this guide by BTicino](http://www.bticino.com/products-catalogue/management-of-connected-lights-and-shutters/#installation) to setup a ZigBee wireless network which includes the ZigBee USB Gateway 
+- Only powered wireless devices part of the same ZigBee network and within radio coverage of the ZigBee USB Gateway will be discovered. Unreachable or not powered devices will be discovered as *GENERIC* devices and cannot be controlled. Control units cannot be discovered by the ZigBee USB Gateway and therefore are not supported
 
 
 ## Thing Configuration
@@ -170,24 +170,26 @@ To add a gateway manually using PaperUI: go to *Inbox > "+" > OpenWebNet > click
 
 Parameters for configuration:
 
-- `host` : IP address / hostname of the BUS/SCS gateway (String, *mandatory*)
+- `host` : IP address / hostname of the BUS/SCS gateway (`String`, *mandatory*)
    - Example: `192.168.1.35`
-- `port` : port (int, *optional*, default: `20000`)
-- `passwd` : gateway password (String, *required* for gateways that have a password set. Default: `12345`)
+- `port` : port (`int`, *optional*, default: `20000`)
+- `passwd` : gateway password (`String`, *required* for gateways that have a password set. Default: `12345`)
    - Example: `abcde` or `12345`
    - if the BUS/SCS gateway is configured to accept connections from the openHAB computer IP address, no password should be required
-   - in all other cases, a password must be set. This includes  gateways that have been discovered and added from Inbox that without a password settings will not become ONLINE
-- `discoveryByActivation`: discover BUS devices when they are activated also when a device scan is not currently active (boolean, *optional*, default: `false`)
+   - in all other cases, a password must be set. This includes gateways that have been discovered and added from Inbox that without a password settings will not become ONLINE
+- `discoveryByActivation`: discover BUS devices when they are activated also when a device scan is not currently active (`boolean`, *optional*, default: `false`). See [Discovery by Activation](#discovery-by-activation).
 
 Alternatively the BUS/SCS Gateway thing can be configured using the `.things` file, see `openwebnet.things` example [below](#full-example).
 
-### Configuring Wireless (ZigBee) USB Dongle
+### Configuring Wireless ZigBee USB Gateway 
 
-The wireless ZigBee USB dongle is discovered automatically and added in Inbox. Manual configuration is not supported at the moment.
+The wireless ZigBee USB Gateway is discovered automatically and added in Inbox.
+
+Manual configuration *is not supported* at the moment.
 
 ### Configuring Devices
 
-Devices can be discovered automatically from Inbox after the gateway has been configured and connected.
+Devices can be discovered automatically from Inbox after their gateway has been configured and connected.
 
 Devices can be also added manually from PaperUI. For each device it must be configured:
 
@@ -196,8 +198,8 @@ Devices can be also added manually from PaperUI. For each device it must be conf
   - example for BUS/SCS: Point to Point `A=2 PL=4` --> `WHERE="24"`
   - example for BUS/SCS: Point to Point `A=6 PL=4` on local bus --> `WHERE="64#4#01"`
   - example for BUS/SCS thermo Zones: `Zone=1` --> `WHERE="1"`; external probe `5` --> `WHERE="500"`
-  - example for ZigBee/wireless: use decimal format address without the UNIT part and network: ZigBee `WHERE=414122201#9` --> `WHERE="4141222"`
-  - for CEN+ use 2+N[0-2047]; example Scenario Control 5 --> WHERE=25
+  - example for ZigBee devices: use decimal format address without the UNIT part and network: ZigBee `WHERE=414122201#9` --> `WHERE="4141222"`
+  - for CEN+ use 2+N[0-2047], example: Scenario Control `5` --> `WHERE=25`
 
 
 ## Channels
@@ -265,7 +267,7 @@ To be visible to assistants like Google Assistant/Amazon Alexa/Apple HomeKit (Si
 Items created automatically with PaperUI (Simple Mode item linking: `Configuration > System > Item Linking > Simple mode > SAVE`) will get automatically the correct tag from the binding: in particular items associated with these channels will have the following tags:
 
 - `switch` / `brightness` channels will have the `Lighting` tag
-- `shutter` channel will have the `Blinds` and `Switchable` tag
+- `shutter` channel will have the `Blinds` tag
 - `temperature` channel will have the `CurrentTemperature` tag
 - `setpointTemperature` channel will have the `TargetTemperature` tag
 - `heatingCoolingMode` channel will have the `homekit:HeatingCoolingMode` tag
@@ -311,10 +313,10 @@ Bridge openwebnet:bus_gateway:mybridge "MyHOMEServer1" [ host="192.168.1.35", pa
 
 
 ```xtend
-<TODO----- ZigBee Dongle configuration only needed for radio devices >
-Bridge openwebnet:dongle:mydongle2  [serialPort="kkkkkkk"] {
-    dimmer          myzigbeedimmer [ where="xxxxx"]
-    on_off_switch   myzigbeeswitch [ where="yyyyy"]
+<TODO----- ZigBee USB Gateway configuration -- only needed for radio devices >
+Bridge openwebnet:zb_gateway:myZBgateway  [serialPort="kkkkkkk"] {
+    zb_dimmer          myzigbeedimmer [ where="xxxxx"]
+    zb_on_off_switch   myzigbeeswitch [ where="yyyyy"]
 }
 ```
 
@@ -417,7 +419,7 @@ Visit the links at the end of section [Integration with Assistants](#integration
 
 #### When message/feature XXXX will be supported ?
 You can check if someone has already requested support for a message/feature here: [GitHub repo](https://github.com/mvalla/openhab2-addons/issues).
-If not, add a new issue. Issues are organised by milestones, but deadlines of course are not guaranteed (other volunteer developers are welcome!).
+If not, add a new issue. Issues are organised by milestones, but deadlines -of course- are not guaranteed (other volunteer developers are welcome!).
 
 ### Known Issues
 For a full list of current open issues / features requests see [GitHub repo](https://github.com/mvalla/openhab2-addons/issues)
@@ -432,15 +434,18 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
 
 **v2.5.0.M3 =IN PROGRESS=** - dd/04/2019
 - [FIX #30] manually configured things are now ignored during auto-discovery
-- [FIX #67] param discoveryByActivation changed to boolean
+- [FIX #67] *[BREAKING CHANGE]* param discoveryByActivation changed to boolean ("false" -> false)
 - [FIX #74] Updated README with energy example
-- [FIX #77] Zigbee bridge: serial port as config parameter
-- [FIX] fixed detecting wrong device id for discovered Zigbee devices
 - checked licence headers & javadocs. Improved logging
 - removed logging INFO when discovering devices via UPnP
 - firmware ver. and MAC address are now read from BUS gateway
-- BUS gateway MAC addr. used as serialNumber (representation-property) to avoid discovery of same gateway that was added manually
-- debug messages for ZB connect/connectDongle
+- BUS gateway MAC addr. used as `serialNumber` (representation-property) to avoid discovery of same gateway that was added manually
+- on the ZigBee part:
+    - [FIX] fixed detecting wrong device id for discovered Zigbee devices
+    - [FIX #77] Zigbee bridge: serial port as config parameter
+    - *[BREAKING CHANGE]* ZigBee gateway: now `zigbeeid` is used as representation-property
+    - *[BREAKING CHANGE]* renamed thing-types for ZigBee devices and GenericDevice. Previous ZigBee configured things must be updated (file) / re-discovered (PaperUI)
+    - debug messages for ZB connect/connectGateway
 
 **v2.5.0.M2-1** - 20/03/2019
 - [FIX #66] USB dongle (gateway) cannot connect anymore
@@ -460,7 +465,7 @@ See: https://github.com/mvalla/openhab2-addons/issues/14
 
 **v2.5.0.M1** - 28/01/2019
 
-- **[FIX #28] automatic discovery of BUS gateways is now supported**
+- [FIX #28] automatic discovery of BUS gateways is now supported
 - gateway model, firmwareVersion and serialNumber are now read from UPnP discovery
 - [FIX #39] set subscription interval for Energy Meter
 - [FIX #4] added support for BTicino movement sensors (like AM5658 Green Switch) 

@@ -115,23 +115,21 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
         ThingTypeUID thingType = getThing().getThingTypeUID();
         logger.debug("==OWN== Bridge type: {}", thingType);
 
-        if (thingType.equals(THING_TYPE_DONGLE)) {
+        if (thingType.equals(THING_TYPE_ZB_GATEWAY)) {
             initZigBeeGateway();
         } else {
             initBusGateway();
             isBusGateway = true;
         }
 
-        // debug
-
+        // DEUBG
         if (!this.testTransformations()) {
             logger.error("==OWN== @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TRANSFORMATION ERORR");
             return;
         } else {
             logger.info("==OWN== @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TRANSFORMATION *OK* ");
         }
-
-        // end-debug
+        // END-DEBUG
 
         gateway.subscribe(this);
         if (gateway.isConnected()) { // gateway is already connected, device can go ONLINE
@@ -456,7 +454,7 @@ public class OpenWebNetBridgeHandler extends ConfigStatusBridgeHandler implement
         switch (error) {
             case DISCONNECTED:
             case LIB_LINKAGE_ERROR:
-                cause = "Please check that the ZigBee dongle is correctly plugged-in, and the driver installed and loaded";
+                cause = "Please check that the ZigBee USB Gateway is correctly plugged-in, and the driver installed and loaded";
                 break;
             case NO_SERIAL_PORTS_ERROR:
                 cause = "No serial ports found";

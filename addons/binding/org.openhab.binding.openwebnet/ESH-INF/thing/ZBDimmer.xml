@@ -6,9 +6,9 @@
 
 
 	<!-- Thing for ZigBee Dimmer (BTicino 4585/4594/...) -->
-	<thing-type id="dimmer">
+	<thing-type id="zb_dimmer">
 		<supported-bridge-type-refs>
-			<bridge-type-ref id="dongle" />
+			<bridge-type-ref id="zb_gateway" />
 		</supported-bridge-type-refs>
 
 		<label>ZigBee Dimmer</label>

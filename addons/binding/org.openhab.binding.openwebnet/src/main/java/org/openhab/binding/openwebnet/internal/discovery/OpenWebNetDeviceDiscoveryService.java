@@ -106,14 +106,14 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
         if (deviceType != null) {
             switch (deviceType) {
                 case ZIGBEE_ON_OFF_SWITCH: {
-                    thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_ON_OFF_SWITCH;
-                    thingLabel = OpenWebNetBindingConstants.THING_LABEL_ON_OFF_SWITCH;
+                    thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_ZB_ON_OFF_SWITCH;
+                    thingLabel = OpenWebNetBindingConstants.THING_LABEL_ZB_ON_OFF_SWITCH;
                     deviceWho = Who.LIGHTING;
                     break;
                 }
                 case ZIGBEE_DIMMER_SWITCH: {
-                    thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_DIMMER;
-                    thingLabel = OpenWebNetBindingConstants.THING_LABEL_DIMMER;
+                    thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_ZB_DIMMER;
+                    thingLabel = OpenWebNetBindingConstants.THING_LABEL_ZB_DIMMER;
                     deviceWho = Who.LIGHTING;
                     break;
                 }
@@ -138,8 +138,8 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
                 }
                 case ZIGBEE_SHUTTER_SWITCH:
                 case ZIGBEE_SHUTTER_CONTROL: {
-                    thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_AUTOMATION;
-                    thingLabel = OpenWebNetBindingConstants.THING_LABEL_AUTOMATION;
+                    thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_ZB_AUTOMATION;
+                    thingLabel = OpenWebNetBindingConstants.THING_LABEL_ZB_AUTOMATION;
                     deviceWho = Who.AUTOMATION;
                     break;
                 }
@@ -202,13 +202,13 @@ public class OpenWebNetDeviceDiscoveryService extends AbstractDiscoveryService i
             logger.debug("==OWN:DeviceDiscovery== will remove previous result if exists");
             thingRemoved(thingUID); // remove previously discovered thing
             // re-create thingUID with new type
-            thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_ON_OFF_SWITCH_2UNITS;
-            thingLabel = OpenWebNetBindingConstants.THING_LABEL_ON_OFF_SWITCH_2UNITS;
+            thingTypeUID = OpenWebNetBindingConstants.THING_TYPE_ZB_ON_OFF_SWITCH_2UNITS;
+            thingLabel = OpenWebNetBindingConstants.THING_LABEL_ZB_ON_OFF_SWITCH_2UNITS;
             thingUID = new ThingUID(thingTypeUID, bridgeUID, tId);
             whereLabel = whereLabel.replace("02#", "00#"); // replace unit '02' with all unit '00'
             logger.debug("==OWN:DeviceDiscovery== UNIT=02, switching type from {} to {}",
-                    OpenWebNetBindingConstants.THING_TYPE_ON_OFF_SWITCH,
-                    OpenWebNetBindingConstants.THING_TYPE_ON_OFF_SWITCH_2UNITS);
+                    OpenWebNetBindingConstants.THING_TYPE_ZB_ON_OFF_SWITCH,
+                    OpenWebNetBindingConstants.THING_TYPE_ZB_ON_OFF_SWITCH_2UNITS);
         }
         Map<String, Object> properties = new HashMap<>(2);
         properties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_WHERE, bridgeHandler.normalizeWhere(where));

@@ -34,8 +34,8 @@ public class OpenWebNetBindingConstants {
 
     // #LIST OF Thing Type UIDs
     // bridges
-    public static final ThingTypeUID THING_TYPE_DONGLE = new ThingTypeUID(BINDING_ID, "dongle");
-    public static final String THING_LABEL_DONGLE = "ZigBee USB Dongle";
+    public static final ThingTypeUID THING_TYPE_ZB_GATEWAY = new ThingTypeUID(BINDING_ID, "zb_gateway");
+    public static final String THING_LABEL_ZB_GATEWAY = "ZigBee USB Gateway";
     public static final ThingTypeUID THING_TYPE_BUS_GATEWAY = new ThingTypeUID(BINDING_ID, "bus_gateway");
     public static final String THING_LABEL_BUS_GATEWAY = "BUS Gateway";
     // generic (unknown) device
@@ -69,14 +69,15 @@ public class OpenWebNetBindingConstants {
     public static final String THING_LABEL_BUS_DRY_CONTACT_IR = "Dry Contact/IR";
 
     // ZIGBEE
-    public static final ThingTypeUID THING_TYPE_ON_OFF_SWITCH = new ThingTypeUID(BINDING_ID, "on_off_switch");
-    public static final String THING_LABEL_ON_OFF_SWITCH = "ZigBee Switch";
-    public static final ThingTypeUID THING_TYPE_ON_OFF_SWITCH_2UNITS = new ThingTypeUID(BINDING_ID, "on_off_switch2u");
-    public static final String THING_LABEL_ON_OFF_SWITCH_2UNITS = "ZigBee 2-units Switch";
-    public static final ThingTypeUID THING_TYPE_DIMMER = new ThingTypeUID(BINDING_ID, "dimmer");
-    public static final String THING_LABEL_DIMMER = "ZigBee Dimmer";
-    public static final ThingTypeUID THING_TYPE_AUTOMATION = new ThingTypeUID(BINDING_ID, "automation");
-    public static final String THING_LABEL_AUTOMATION = "ZigBee Automation";
+    public static final ThingTypeUID THING_TYPE_ZB_ON_OFF_SWITCH = new ThingTypeUID(BINDING_ID, "zb_on_off_switch");
+    public static final String THING_LABEL_ZB_ON_OFF_SWITCH = "ZigBee Switch";
+    public static final ThingTypeUID THING_TYPE_ZB_ON_OFF_SWITCH_2UNITS = new ThingTypeUID(BINDING_ID,
+            "zb_on_off_switch2u");
+    public static final String THING_LABEL_ZB_ON_OFF_SWITCH_2UNITS = "ZigBee 2-units Switch";
+    public static final ThingTypeUID THING_TYPE_ZB_DIMMER = new ThingTypeUID(BINDING_ID, "zb_dimmer");
+    public static final String THING_LABEL_ZB_DIMMER = "ZigBee Dimmer";
+    public static final ThingTypeUID THING_TYPE_ZB_AUTOMATION = new ThingTypeUID(BINDING_ID, "zb_automation");
+    public static final String THING_LABEL_ZB_AUTOMATION = "ZigBee Automation";
 
     // TODO transform these constants in enum+hashmaps
 
@@ -84,10 +85,11 @@ public class OpenWebNetBindingConstants {
     // ## Generic
     public static final Set<ThingTypeUID> GENERIC_SUPPORTED_THING_TYPES = Sets.newHashSet(THING_TYPE_DEVICE);
     // ## Lighting
-    public static final Set<ThingTypeUID> LIGHTING_SUPPORTED_THING_TYPES = Sets.newHashSet(THING_TYPE_ON_OFF_SWITCH,
-            THING_TYPE_ON_OFF_SWITCH_2UNITS, THING_TYPE_DIMMER, THING_TYPE_BUS_ON_OFF_SWITCH, THING_TYPE_BUS_DIMMER);
+    public static final Set<ThingTypeUID> LIGHTING_SUPPORTED_THING_TYPES = Sets.newHashSet(THING_TYPE_ZB_ON_OFF_SWITCH,
+            THING_TYPE_ZB_ON_OFF_SWITCH_2UNITS, THING_TYPE_ZB_DIMMER, THING_TYPE_BUS_ON_OFF_SWITCH,
+            THING_TYPE_BUS_DIMMER);
     // ## Automation
-    public static final Set<ThingTypeUID> AUTOMATION_SUPPORTED_THING_TYPES = Sets.newHashSet(THING_TYPE_AUTOMATION,
+    public static final Set<ThingTypeUID> AUTOMATION_SUPPORTED_THING_TYPES = Sets.newHashSet(THING_TYPE_ZB_AUTOMATION,
             THING_TYPE_BUS_AUTOMATION);
     // ## Thermoregulation
     public static final Set<ThingTypeUID> THERMOREGULATION_SUPPORTED_THING_TYPES = Sets
@@ -105,7 +107,7 @@ public class OpenWebNetBindingConstants {
                     Sets.union(THERMOREGULATION_SUPPORTED_THING_TYPES, Sets.union(ENERGY_SUPPORTED_THING_TYPES,
                             Sets.union(SCENARIO_SUPPORTED_THING_TYPES, GENERIC_SUPPORTED_THING_TYPES)))));
 
-    public static final Set<ThingTypeUID> BRIDGE_SUPPORTED_THING_TYPES = Sets.newHashSet(THING_TYPE_DONGLE,
+    public static final Set<ThingTypeUID> BRIDGE_SUPPORTED_THING_TYPES = Sets.newHashSet(THING_TYPE_ZB_GATEWAY,
             THING_TYPE_BUS_GATEWAY);
 
     public static final Set<ThingTypeUID> ALL_SUPPORTED_THING_TYPES = Sets.union(DEVICE_SUPPORTED_THING_TYPES,

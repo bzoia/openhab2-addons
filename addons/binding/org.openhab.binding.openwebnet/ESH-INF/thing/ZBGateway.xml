@@ -4,10 +4,10 @@
 	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
-	<!-- OpenWebNet USB Dongle -->
-	<bridge-type id="dongle">
-		<label>ZigBee USB Dongle</label>
-		<description><![CDATA[This gateway (BTicino/Legrand models: BTI-3578/088328) connects via USB to a BTicino/Legrand ZigBee network using the OpenWebNet protocol.<br>For more information see:<li>http://www.catalogue.bticino.com/BTI-3578-EN</li><li>http://ecatalogue.legrand.fr/088328-interface-open-radio-permet-piloter-installation.html</li>]]></description>
+	<!-- OpenWebNet ZigBee USB Gateway -->
+	<bridge-type id="zb_gateway">
+		<label>ZigBee USB Gateway</label>
+		<description>This USB gateway (BTicino/Legrand models: BTI-3578/088328) connects to a BTicino/Legrand ZigBee network and uses the OpenWebNet protocol. For more information see: https://catalogo.bticino.it/BTI-3578-IT and https://www.legrand.com/ecatalogue/088328-openweb-net-zigbee-gateway-radio-interface.html</description>
 
 		<properties>
 			<property name="vendor">BTicino/Legrand</property>
@@ -21,7 +21,7 @@
 			<parameter name="serialPort" type="text">
 				<label>Serial Port</label>
 				<context>serial-port</context>
-				<description>Serial port where the OpenWebNet Zigbee USB dongle is connected. Example: COM3 (Win), /dev/ttyUSB0 (Linux), etc.</description>
+				<description>Serial port where the OpenWebNet ZigBee USB Gateway is connected. Example: COM3 (Win), /dev/ttyUSB0 (Linux), etc.</description>
 				<required>true</required>
 			</parameter>
 		</config-description>

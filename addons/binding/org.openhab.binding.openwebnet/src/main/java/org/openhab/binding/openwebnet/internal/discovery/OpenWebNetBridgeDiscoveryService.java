@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The {@link OpenWebNetBridgeDiscoveryService} is a {@link DiscoveryService} implementation responsible for discovering
- * OpenWebNet (Zigbee) gateways in the network.
+ * OpenWebNet (ZigBee) gateways in the network.
  *
  * @author Massimo Valla - Initial contribution
  */
@@ -48,10 +48,10 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
 
     private final static int DISCOVERY_TIMEOUT = 30; // seconds
 
-    // TODO support multiple dongles at the same time
+    // TODO support multiple gateways at the same time
     private OpenGatewayZigBee zbgateway;
-    private int dongleZigBeeId = 0;
-    private ThingUID dongleUID = null;
+    private int gatewayZigBeeId = 0;
+    private ThingUID gatewayUID = null;
 
     public OpenWebNetBridgeDiscoveryService() {
         super(OpenWebNetBindingConstants.BRIDGE_SUPPORTED_THING_TYPES, DISCOVERY_TIMEOUT, false);
@@ -76,21 +76,21 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
      */
     private void startZigBeeScan() {
         if (zbgateway == null) {
-            logger.debug("==OWN:BridgeDiscovery:Dongle== Gateway NULL, creating a new one ...");
+            logger.debug("==OWN:BridgeDiscovery:ZB== Gateway NULL, creating a new one ...");
             zbgateway = OpenWebNet.gatewayZigBeeAsSingleton();
             zbgateway.subscribe(this);
         }
         if (!zbgateway.isConnected()) {
-            logger.debug("==OWN:BridgeDiscovery:Dongle== ... trying to connect dongle ...");
+            logger.debug("==OWN:BridgeDiscovery:ZB== ... trying to connect gateway ...");
             zbgateway.connect();
-        } else { // dongle is already connected
-            logger.debug("==OWN:BridgeDiscovery:Dongle== ... dongle is already connected ...");
-            if (dongleZigBeeId != 0) {
-                // a dongle was already discovered, notify new dongle thing to inbox
-                logger.debug("==OWN:BridgeDiscovery:Dongle== ... dongle ZigBeeId is: {}", dongleZigBeeId);
-                notifyNewDongleThing(dongleZigBeeId);
+        } else { // gw is already connected
+            logger.debug("==OWN:BridgeDiscovery:ZB== ... gateway is already connected ...");
+            if (gatewayZigBeeId != 0) {
+                // a gw was already discovered, notify new gateway thing to inbox
+                logger.debug("==OWN:BridgeDiscovery:ZB== ... gateway ZigBeeId is: {}", gatewayZigBeeId);
+                notifyNewZBGatewayThing(gatewayZigBeeId);
             } else {
-                logger.debug("==OWN:BridgeDiscovery:Dongle== ... requesting again MACAddress ...");
+                logger.debug("==OWN:BridgeDiscovery:ZB== ... requesting again MACAddress ...");
                 zbgateway.send(GatewayManagement.requestMACAddress());
             }
         }
@@ -103,30 +103,30 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
     }
 
     /**
-     * Create and notify to Inbox a new USB dongle thing has been discovered
+     * Create and notify to Inbox a new ZigBee USB Gateway thing has been discovered
      *
-     * @param dongleZigBeeId the discovered dongle ZigBeeId
+     * @param gatewayZigBeeId the discovered gateway ZigBee ID
      */
-    private void notifyNewDongleThing(int dongleZigBeeId) {
-        dongleUID = new ThingUID(OpenWebNetBindingConstants.THING_TYPE_DONGLE, Integer.toString(dongleZigBeeId));
-        Map<String, Object> dongleProperties = new HashMap<>(2);
-        dongleProperties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_SERIAL_PORT, zbgateway.getConnectedPort());
-        dongleProperties.put(OpenWebNetBindingConstants.PROPERTY_FIRMWARE_VERSION, zbgateway.getFirmwareVersion());
-        dongleProperties.put(OpenWebNetBindingConstants.PROPERTY_ZIGBEEID, dongleZigBeeId);
+    private void notifyNewZBGatewayThing(int gatewayZigBeeId) {
+        gatewayUID = new ThingUID(OpenWebNetBindingConstants.THING_TYPE_ZB_GATEWAY, Integer.toString(gatewayZigBeeId));
+        Map<String, Object> gwProperties = new HashMap<>(3);
+        gwProperties.put(OpenWebNetBindingConstants.CONFIG_PROPERTY_SERIAL_PORT, zbgateway.getConnectedPort());
+        gwProperties.put(OpenWebNetBindingConstants.PROPERTY_FIRMWARE_VERSION, zbgateway.getFirmwareVersion());
+        gwProperties.put(OpenWebNetBindingConstants.PROPERTY_ZIGBEEID, String.valueOf(gatewayZigBeeId));
 
-        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(dongleUID).withProperties(dongleProperties)
-                .withLabel(OpenWebNetBindingConstants.THING_LABEL_DONGLE + " (ID=" + dongleZigBeeId + ", "
-                        + zbgateway.getConnectedPort() + ", v=" + zbgateway.getFirmwareVersion() + ")")
+        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(gatewayUID).withProperties(gwProperties)
+                .withLabel(OpenWebNetBindingConstants.THING_LABEL_ZB_GATEWAY + " (ID=" + gatewayZigBeeId + ", "
+                        + zbgateway.getConnectedPort() + ", v" + zbgateway.getFirmwareVersion() + ")")
                 .withRepresentationProperty(OpenWebNetBindingConstants.PROPERTY_ZIGBEEID).build();
-        logger.info("==OWN:BridgeDiscovery== --- DONGLE thing discovered: {}", discoveryResult.getLabel());
+        logger.info("==OWN:BridgeDiscovery== --- ZIGBEE USB GATEWAY thing discovered: {}", discoveryResult.getLabel());
         thingDiscovered(discoveryResult);
     }
 
     @Override
     public void onConnected() {
-        logger.info("==OWN:BridgeDiscovery:Dongle== onConnected() FOUND DONGLE: CONNECTED port={}",
+        logger.info("==OWN:BridgeDiscovery:ZB== onConnected() FOUND ZIGBEE USB GATEWAY: CONNECTED port={}",
                 zbgateway.getConnectedPort());
-        dongleZigBeeId = 0; // reset dongleZigBeeId
+        gatewayZigBeeId = 0; // reset gatewayZigBeeId
         zbgateway.send(GatewayManagement.requestFirmwareVersion());
         zbgateway.send(GatewayManagement.requestMACAddress());
     }
@@ -139,7 +139,7 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
             logger.warn("==OWN:BridgeDiscovery== onConnectionError() - CONNECTION ERROR: {} - {}", error, errMsg);
         }
         stopScan();
-        // TODO handle other dongle connection problems
+        // TODO handle other gw connection problems
     }
 
     @Override
@@ -163,14 +163,14 @@ public class OpenWebNetBridgeDiscoveryService extends AbstractDiscoveryService i
     public void onMessage(OpenMessage msg) {
         // TODO change this to listen to response to MACddress request session with timeout
         // and not to all messages that arrive here
-        if (dongleZigBeeId == 0) { // we do not know the discovered ZigBeeID yet, check if it was discovered with this
+        if (gatewayZigBeeId == 0) { // we do not know the discovered ZigBeeID yet, check if it was discovered with this
             // message
-            int zbid = zbgateway.getDongleZigBeeIdAsDecimal();
+            int zbid = zbgateway.getZigBeeIdAsDecimal();
             if (zbid != 0) {
-                // a dongle was discovered, notify new dongle thing to inbox
-                dongleZigBeeId = zbid;
-                logger.debug("==OWN:BridgeDiscovery== DONGLE ZigBeeID is set: {}", dongleZigBeeId);
-                notifyNewDongleThing(dongleZigBeeId);
+                // a gw was discovered, notify new gw thing to inbox
+                gatewayZigBeeId = zbid;
+                logger.debug("==OWN:BridgeDiscovery== GW ZigBeeID is set: {}", gatewayZigBeeId);
+                notifyNewZBGatewayThing(gatewayZigBeeId);
             }
         } else {
             logger.trace("==OWN:BridgeDiscovery== onReceiveFrame() ZigBeeID != 0 : ignoring (msg={})", msg);

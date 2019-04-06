@@ -225,7 +225,7 @@ public class OpenWebNetLightingHandler extends OpenWebNetThingHandler {
     private void updateLightState(Lighting msg) {
         logger.debug("==OWN:LightingHandler== updateLightState() for thing: {}", thing.getUID());
         ThingTypeUID thingType = thing.getThingTypeUID();
-        if (THING_TYPE_DIMMER.equals(thingType) || THING_TYPE_BUS_DIMMER.equals(thingType)) {
+        if (THING_TYPE_ZB_DIMMER.equals(thingType) || THING_TYPE_BUS_DIMMER.equals(thingType)) {
             updateLightBrightnessState(msg);
         } else {
             updateLightOnOffState(msg);
