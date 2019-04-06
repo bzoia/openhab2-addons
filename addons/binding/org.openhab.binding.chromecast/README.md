@@ -35,6 +35,15 @@ No authentication is required for accessing the devices on the network.
 
 Chromecast devices can also be manually added.
 The only configuration parameter is the `ipAddress`.
+For an audio group also the port is necessary.
+The autodiscovery process finds the port automatically.
+With manual thing configuration the parameter `port` must be determined manually.
+
+Example for audio group:
+
+```java
+Thing chromecast:audiogroup:bathroom  [ ipAddress="192.168.0.23", port=42139]
+```
 
 ## Channels
 
@@ -65,7 +74,7 @@ The only configuration parameter is the `ipAddress`.
 | trackNumber     | Number      | (MusicTrackMediaMetadata) Number of the track on the album                                                                                                                            |
 | creationDate    | DateTime    | (PhotoMediaMetadata) ISO 8601 date and time this photograph was taken                                                                                                                 |
 | locationName    | String      | (PhotoMediaMetadata) Verbal location where the photograph was taken; for example, "Madrid, Spain."                                                                                    |
-| location        | Point       | (PhotoMediaMetadata) Geographical location of where the photograph was taken                                                                                                          |
+| location        | Location    | (PhotoMediaMetadata) Geographical location of where the photograph was taken                                                                                                          |
 | broadcastDate   | DateTime    | (TvShowMediaMetadata) ISO 8601 date and time this episode was released                                                                                                                |
 | episodeNumber   | Number      | (TvShowMediaMetadata) Episode number (in the season) of the t.v. show                                                                                                                 |
 | seasonNumber    | Number      | (TvShowMediaMetadata) Season number of the t.v. show                                                                                                                                  |
