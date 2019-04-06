@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" configuration-pid="binding.spotify.authService" deactivate="deactivate" immediate="true" name="org.openhab.binding.spotify.internal.SpotifyAuthService">
+   <service>
+      <provide interface="org.openhab.binding.spotify.internal.SpotifyAuthService"/>
+   </service>
+   <reference bind="setHttpService" interface="org.osgi.service.http.HttpService" name="HttpService" unbind="unsetHttpService"/>
+   <implementation class="org.openhab.binding.spotify.internal.SpotifyAuthService"/>
+</scr:component>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.openhab.extensionservice.marketplace.automation.internal.MarketplaceRuleTemplateProvider">
+   <service>
+      <provide interface="org.openhab.extensionservice.marketplace.automation.internal.MarketplaceRuleTemplateProvider"/>
+      <provide interface="org.openhab.core.automation.template.RuleTemplateProvider"/>
+   </service>
+   <reference bind="setParser" interface="org.openhab.core.automation.parser.Parser" name="Parser" target="(&amp;(format=json)(parser.type=parser.template))" unbind="unsetParser"/>
+   <reference bind="setStorageService" interface="org.eclipse.smarthome.core.storage.StorageService" name="StorageService" policy="dynamic" unbind="unsetStorageService"/>
+   <implementation class="org.openhab.extensionservice.marketplace.automation.internal.MarketplaceRuleTemplateProvider"/>
+</scr:component>

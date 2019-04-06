@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" configuration-policy="optional" deactivate="deactivate" immediate="true" name="org.openhab.io.neeo.NeeoService">
+   <property name="service.pid" value="org.openhab.io.neeo.NeeoService"/>
+   <property name="service.config.description.uri" value="io:neeo"/>
+   <property name="service.config.label" value="NEEO Integration"/>
+   <property name="service.config.category" value="io"/>
+   <service>
+      <provide interface="org.eclipse.smarthome.core.events.EventSubscriber"/>
+   </service>
+   <reference bind="setBindingInfoRegistry" interface="org.eclipse.smarthome.core.binding.BindingInfoRegistry" name="BindingInfoRegistry" unbind="unsetBindingInfoRegistry"/>
+   <reference bind="setChannelTypeRegistry" interface="org.eclipse.smarthome.core.thing.type.ChannelTypeRegistry" name="ChannelTypeRegistry" unbind="unsetChannelTypeRegistry"/>
+   <reference bind="setEventPublisher" interface="org.eclipse.smarthome.core.events.EventPublisher" name="EventPublisher" unbind="unsetEventPublisher"/>
+   <reference bind="setHttpService" interface="org.osgi.service.http.HttpService" name="HttpService" unbind="unsetHttpService"/>
+   <reference bind="setItemChannelLinkRegistry" interface="org.eclipse.smarthome.core.thing.link.ItemChannelLinkRegistry" name="ItemChannelLinkRegistry" unbind="unsetItemChannelLinkRegistry"/>
+   <reference bind="setItemRegistry" interface="org.eclipse.smarthome.core.items.ItemRegistry" name="ItemRegistry" unbind="unsetItemRegistry"/>
+   <reference bind="setMDNSClient" interface="org.eclipse.smarthome.io.transport.mdns.MDNSClient" name="MDNSClient" unbind="unsetMDNSClient"/>
+   <reference bind="setNetworkAddressService" interface="org.eclipse.smarthome.core.net.NetworkAddressService" name="NetworkAddressService" unbind="unsetNetworkAddressService"/>
+   <reference bind="setThingRegistry" interface="org.eclipse.smarthome.core.thing.ThingRegistry" name="ThingRegistry" unbind="unsetThingRegistry"/>
+   <reference bind="setThingTypeRegistry" interface="org.eclipse.smarthome.core.thing.type.ThingTypeRegistry" name="ThingTypeRegistry" unbind="unsetThingTypeRegistry"/>
+   <implementation class="org.openhab.io.neeo.NeeoService"/>
+</scr:component>

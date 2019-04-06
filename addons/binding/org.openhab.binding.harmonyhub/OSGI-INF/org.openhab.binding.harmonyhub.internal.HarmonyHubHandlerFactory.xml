@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.harmonyhub" immediate="true" name="org.openhab.binding.harmonyhub.internal.HarmonyHubHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+      <provide interface="org.eclipse.smarthome.core.thing.type.ChannelTypeProvider"/>
+   </service>
+   <implementation class="org.openhab.binding.harmonyhub.internal.HarmonyHubHandlerFactory"/>
+</scr:component>

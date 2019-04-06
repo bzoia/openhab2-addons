@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" configuration-pid="org.openhab.voice.googletts" modified="updateConfig" name="org.openhab.voice.googletts.internal.GoogleTTSService">
+   <property name="service.pid" value="org.openhab.voice.googletts"/>
+   <property name="service.config.label" value="Google Cloud Text-to-Speech"/>
+   <property name="service.config.description.uri" value="voice:googletts"/>
+   <property name="service.config.category" value="voice"/>
+   <service>
+      <provide interface="org.eclipse.smarthome.core.voice.TTSService"/>
+   </service>
+   <implementation class="org.openhab.voice.googletts.internal.GoogleTTSService"/>
+</scr:component>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" configuration-pid="discovery.digitalstrom" deactivate="deactivate" immediate="true" modified="modified" name="org.openhab.binding.digitalstrom.internal.discovery.BridgeDiscoveryService">
+   <service>
+      <provide interface="org.eclipse.smarthome.config.discovery.DiscoveryService"/>
+   </service>
+   <implementation class="org.openhab.binding.digitalstrom.internal.discovery.BridgeDiscoveryService"/>
+</scr:component>

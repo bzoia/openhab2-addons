@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.kodi" name="org.openhab.binding.kodi.internal.KodiHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setAudioHTTPServer" interface="org.eclipse.smarthome.core.audio.AudioHTTPServer" name="AudioHTTPServer" unbind="unsetAudioHTTPServer"/>
+   <reference bind="setDynamicStateDescriptionProvider" interface="org.openhab.binding.kodi.internal.KodiDynamicStateDescriptionProvider" name="DynamicStateDescriptionProvider" unbind="unsetDynamicStateDescriptionProvider"/>
+   <reference bind="setHttpClientFactory" interface="org.eclipse.smarthome.io.net.http.WebSocketFactory" name="HttpClientFactory" unbind="unsetHttpClientFactory"/>
+   <reference bind="setNetworkAddressService" interface="org.eclipse.smarthome.core.net.NetworkAddressService" name="NetworkAddressService" unbind="unsetNetworkAddressService"/>
+   <implementation class="org.openhab.binding.kodi.internal.KodiHandlerFactory"/>
+</scr:component>

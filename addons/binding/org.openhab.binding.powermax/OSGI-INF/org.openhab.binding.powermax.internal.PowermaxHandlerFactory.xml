@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.powermax" name="org.openhab.binding.powermax.internal.PowermaxHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setSerialPortManager" interface="org.eclipse.smarthome.io.transport.serial.SerialPortManager" name="SerialPortManager" unbind="unsetSerialPortManager"/>
+   <implementation class="org.openhab.binding.powermax.internal.PowermaxHandlerFactory"/>
+</scr:component>

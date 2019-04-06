@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.lifx" name="org.openhab.binding.lifx.internal.LifxHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setChannelFactory" interface="org.openhab.binding.lifx.internal.LifxChannelFactory" name="ChannelFactory" unbind="unsetChannelFactory"/>
+   <implementation class="org.openhab.binding.lifx.internal.LifxHandlerFactory"/>
+</scr:component>

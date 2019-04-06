@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.sonos" name="org.openhab.binding.sonos.internal.SonosHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setAudioHTTPServer" interface="org.eclipse.smarthome.core.audio.AudioHTTPServer" name="AudioHTTPServer" unbind="unsetAudioHTTPServer"/>
+   <reference bind="setDynamicStateDescriptionProvider" interface="org.openhab.binding.sonos.internal.SonosStateDescriptionOptionProvider" name="DynamicStateDescriptionProvider" unbind="unsetDynamicStateDescriptionProvider"/>
+   <reference bind="setNetworkAddressService" interface="org.eclipse.smarthome.core.net.NetworkAddressService" name="NetworkAddressService" unbind="unsetNetworkAddressService"/>
+   <reference bind="setUpnpIOService" interface="org.eclipse.smarthome.io.transport.upnp.UpnpIOService" name="UpnpIOService" unbind="unsetUpnpIOService"/>
+   <implementation class="org.openhab.binding.sonos.internal.SonosHandlerFactory"/>
+</scr:component>

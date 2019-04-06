@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" activate="activate" configuration-pid="org.eclipse.smarthome.mqttembeddedbroker" deactivate="deactivate" immediate="true" name="org.openhab.io.mqttembeddedbroker.internal.EmbeddedBrokerServiceImpl">
+   <property name="service.pid" value="org.eclipse.smarthome.mqttembeddedbroker"/>
+   <property name="service.config.description.uri" value="mqtt:mqttembeddedbroker"/>
+   <property name="service.config.category" value="MQTT"/>
+   <property name="service.config.label" value="MQTT Embedded Broker"/>
+   <service>
+      <provide interface="org.openhab.io.mqttembeddedbroker.internal.EmbeddedBrokerService"/>
+   </service>
+   <reference bind="setMqttService" interface="org.eclipse.smarthome.io.transport.mqtt.MqttService" name="MqttService" unbind="unsetMqttService"/>
+   <implementation class="org.openhab.io.mqttembeddedbroker.internal.EmbeddedBrokerServiceImpl"/>
+</scr:component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.gpstracker" name="org.openhab.binding.gpstracker.internal.GPSTrackerHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+      <provide interface="org.eclipse.smarthome.config.core.ConfigOptionProvider"/>
+   </service>
+   <reference bind="setHttpService" interface="org.osgi.service.http.HttpService" name="HttpService" unbind="unsetHttpService"/>
+   <reference bind="setLocationProvider" interface="org.eclipse.smarthome.core.i18n.LocationProvider" name="LocationProvider" unbind="unsetLocationProvider"/>
+   <reference bind="setTrackerDiscoveryService" interface="org.openhab.binding.gpstracker.internal.discovery.TrackerDiscoveryService" name="TrackerDiscoveryService" unbind="unsetTrackerDiscoveryService"/>
+   <reference bind="setUnitProvider" interface="org.eclipse.smarthome.core.i18n.UnitProvider" name="UnitProvider" unbind="unsetUnitProvider"/>
+   <implementation class="org.openhab.binding.gpstracker.internal.GPSTrackerHandlerFactory"/>
+</scr:component>

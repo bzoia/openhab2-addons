@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.ipp" name="org.openhab.binding.ipp.internal.IppHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setDiscoveryServiceRegistry" interface="org.eclipse.smarthome.config.discovery.DiscoveryServiceRegistry" name="DiscoveryServiceRegistry" unbind="unsetDiscoveryServiceRegistry"/>
+   <implementation class="org.openhab.binding.ipp.internal.IppHandlerFactory"/>
+</scr:component>

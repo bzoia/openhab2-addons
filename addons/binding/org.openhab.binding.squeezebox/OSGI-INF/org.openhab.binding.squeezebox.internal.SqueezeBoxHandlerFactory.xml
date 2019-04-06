@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="binding.squeezebox" name="org.openhab.binding.squeezebox.internal.SqueezeBoxHandlerFactory">
+   <service>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
+   </service>
+   <reference bind="setAudioHTTPServer" interface="org.eclipse.smarthome.core.audio.AudioHTTPServer" name="AudioHTTPServer" unbind="unsetAudioHTTPServer"/>
+   <reference bind="setDynamicStateDescriptionProvider" interface="org.openhab.binding.squeezebox.internal.SqueezeBoxStateDescriptionOptionsProvider" name="DynamicStateDescriptionProvider" unbind="unsetDynamicStateDescriptionProvider"/>
+   <reference bind="setNetworkAddressService" interface="org.eclipse.smarthome.core.net.NetworkAddressService" name="NetworkAddressService" unbind="unsetNetworkAddressService"/>
+   <implementation class="org.openhab.binding.squeezebox.internal.SqueezeBoxHandlerFactory"/>
+</scr:component>

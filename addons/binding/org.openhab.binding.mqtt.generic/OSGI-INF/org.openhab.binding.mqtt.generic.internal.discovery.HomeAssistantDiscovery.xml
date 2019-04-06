@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="discovery.mqttha" immediate="true" name="org.openhab.binding.mqtt.generic.internal.discovery.HomeAssistantDiscovery">
+   <service>
+      <provide interface="org.eclipse.smarthome.config.discovery.DiscoveryService"/>
+   </service>
+   <reference bind="setMQTTTopicDiscoveryService" interface="org.openhab.binding.mqtt.discovery.MQTTTopicDiscoveryService" name="MQTTTopicDiscoveryService" unbind="unsetMQTTTopicDiscoveryService"/>
+   <implementation class="org.openhab.binding.mqtt.generic.internal.discovery.HomeAssistantDiscovery"/>
+</scr:component>

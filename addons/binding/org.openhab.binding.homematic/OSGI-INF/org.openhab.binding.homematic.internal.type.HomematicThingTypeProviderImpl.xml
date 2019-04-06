@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.openhab.binding.homematic.internal.type.HomematicThingTypeProviderImpl">
+   <service>
+      <provide interface="org.openhab.binding.homematic.internal.type.HomematicThingTypeProvider"/>
+      <provide interface="org.eclipse.smarthome.core.thing.binding.ThingTypeProvider"/>
+   </service>
+   <reference bind="addHomematicThingTypeExcluder" cardinality="0..n" interface="org.openhab.binding.homematic.type.HomematicThingTypeExcluder" name="HomematicThingTypeExcluder" policy="dynamic" unbind="removeHomematicThingTypeExcluder"/>
+   <implementation class="org.openhab.binding.homematic.internal.type.HomematicThingTypeProviderImpl"/>
+</scr:component>

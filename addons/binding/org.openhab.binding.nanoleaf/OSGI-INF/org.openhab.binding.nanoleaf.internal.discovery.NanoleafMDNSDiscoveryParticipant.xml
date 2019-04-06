@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" configuration-pid="discovery.nanoleaf" immediate="true" name="org.openhab.binding.nanoleaf.internal.discovery.NanoleafMDNSDiscoveryParticipant">
+   <service>
+      <provide interface="org.eclipse.smarthome.config.discovery.mdns.MDNSDiscoveryParticipant"/>
+   </service>
+   <implementation class="org.openhab.binding.nanoleaf.internal.discovery.NanoleafMDNSDiscoveryParticipant"/>
+</scr:component>

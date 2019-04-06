@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.openhab.binding.max.internal.MaxConsoleCommandExtension">
+   <service>
+      <provide interface="org.eclipse.smarthome.io.console.extensions.ConsoleCommandExtension"/>
+   </service>
+   <reference bind="setThingRegistry" interface="org.eclipse.smarthome.core.thing.ThingRegistry" name="ThingRegistry" unbind="unsetThingRegistry"/>
+   <implementation class="org.openhab.binding.max.internal.MaxConsoleCommandExtension"/>
+</scr:component>
